@@ -1,0 +1,806 @@
+:root {
+    --accent: #ec008c;
+    --accent-dark: #c80078;
+
+    --background: #f4f5f7;
+    --surface: #ffffff;
+
+    --text: #1f2024;
+    --muted: #737781;
+
+    --border: #e5e6e9;
+
+    --green: #2e9d62;
+    --blue: #3478d4;
+
+    --radius: 20px;
+    --shadow: 0 8px 30px rgba(0, 0, 0, 0.06);
+}
+
+
+/* =========================================================
+   БАЗА
+   ========================================================= */
+
+* {
+    box-sizing: border-box;
+}
+
+html {
+    min-height: 100%;
+}
+
+body {
+    margin: 0;
+    min-height: 100vh;
+
+    font-family:
+        -apple-system,
+        BlinkMacSystemFont,
+        "Segoe UI",
+        Arial,
+        sans-serif;
+
+    background: var(--background);
+    color: var(--text);
+}
+
+button,
+a {
+    font-family: inherit;
+}
+
+a {
+    color: inherit;
+    text-decoration: none;
+}
+
+
+/* =========================================================
+   СТРАНИЦА
+   ========================================================= */
+
+.page {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+.container {
+    width: min(1200px, calc(100% - 40px));
+    margin: 0 auto;
+    flex: 1;
+}
+
+
+/* =========================================================
+   HEADER
+   ========================================================= */
+
+.site-header {
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+}
+
+.brand {
+    width: min(1200px, calc(100% - 40px));
+    min-height: 82px;
+
+    margin: 0 auto;
+
+    display: flex;
+    align-items: center;
+    gap: 18px;
+}
+
+.brand-mark {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    min-width: 86px;
+    height: 42px;
+
+    padding: 0 14px;
+
+    border-radius: 12px;
+
+    background: var(--accent);
+    color: white;
+
+    font-size: 14px;
+    font-weight: 800;
+    letter-spacing: 0.5px;
+}
+
+.brand-title {
+    font-size: 19px;
+    font-weight: 700;
+    line-height: 1.2;
+}
+
+.brand-subtitle {
+    margin-top: 3px;
+
+    font-size: 14px;
+    color: var(--muted);
+}
+
+.back-button {
+    width: 46px;
+    height: 46px;
+
+    border: 0;
+    border-radius: 13px;
+
+    background: #f0f1f3;
+
+    font-size: 25px;
+    cursor: pointer;
+
+    transition:
+        background 0.2s,
+        transform 0.2s;
+}
+
+.back-button:hover {
+    background: #e5e6e9;
+}
+
+.back-button:active {
+    transform: scale(0.95);
+}
+
+
+/* =========================================================
+   БЛИЖАЙШИЙ УРОК
+   ========================================================= */
+
+.upcoming-section {
+    padding-top: 42px;
+}
+
+.upcoming-label {
+    margin-bottom: 12px;
+
+    font-size: 14px;
+    font-weight: 700;
+
+    color: var(--accent);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.upcoming-card {
+    position: relative;
+
+    padding: 34px 38px;
+
+    border-radius: 24px;
+
+    background: var(--surface);
+    box-shadow: var(--shadow);
+
+    cursor: pointer;
+
+    overflow: hidden;
+
+    transition:
+        transform 0.2s,
+        box-shadow 0.2s;
+}
+
+.upcoming-card::after {
+    content: "";
+
+    position: absolute;
+
+    width: 180px;
+    height: 180px;
+
+    right: -70px;
+    bottom: -80px;
+
+    border-radius: 50%;
+
+    background: rgba(236, 0, 140, 0.08);
+}
+
+.upcoming-card:hover {
+    transform: translateY(-2px);
+
+    box-shadow:
+        0 14px 38px rgba(0, 0, 0, 0.09);
+}
+
+.upcoming-date {
+    color: var(--accent);
+
+    font-size: 15px;
+    font-weight: 700;
+}
+
+.upcoming-card h1 {
+    max-width: 850px;
+
+    margin: 10px 0 10px;
+
+    font-size: clamp(25px, 3vw, 36px);
+    line-height: 1.15;
+}
+
+.upcoming-card p {
+    max-width: 800px;
+
+    margin: 0;
+
+    color: var(--muted);
+
+    font-size: 16px;
+    line-height: 1.5;
+}
+
+.upcoming-button {
+    position: relative;
+    z-index: 1;
+
+    display: inline-block;
+
+    margin-top: 25px;
+
+    padding: 12px 18px;
+
+    border-radius: 12px;
+
+    background: var(--accent);
+    color: white;
+
+    font-weight: 700;
+}
+
+
+/* =========================================================
+   ЗАГОЛОВКИ СЕКЦИЙ
+   ========================================================= */
+
+.lessons-section {
+    padding: 46px 0 60px;
+}
+
+.section-heading {
+    display: flex;
+    align-items: center;
+
+    gap: 14px;
+
+    margin-bottom: 20px;
+}
+
+.section-title {
+    font-size: 22px;
+    font-weight: 750;
+}
+
+.section-description {
+    margin-top: 4px;
+
+    color: var(--muted);
+
+    font-size: 14px;
+}
+
+.section-icon {
+    width: 48px;
+    height: 48px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    flex: 0 0 48px;
+
+    border-radius: 14px;
+
+    font-size: 23px;
+}
+
+.lesson-icon {
+    background: rgba(236, 0, 140, 0.1);
+}
+
+.teacher-icon {
+    background: rgba(52, 120, 212, 0.1);
+}
+
+
+/* =========================================================
+   КАРТОЧКИ УРОКОВ
+   ========================================================= */
+
+.lessons-grid {
+    display: grid;
+
+    grid-template-columns:
+        repeat(3, minmax(0, 1fr));
+
+    gap: 18px;
+}
+
+.lesson-card {
+    position: relative;
+
+    min-height: 210px;
+
+    padding: 24px;
+
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+
+    background: var(--surface);
+
+    cursor: pointer;
+
+    transition:
+        transform 0.2s,
+        box-shadow 0.2s,
+        border-color 0.2s;
+}
+
+.lesson-card:hover {
+    transform: translateY(-3px);
+
+    border-color: rgba(236, 0, 140, 0.25);
+
+    box-shadow: var(--shadow);
+}
+
+.lesson-card-top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    gap: 10px;
+}
+
+.lesson-date {
+    color: var(--accent);
+
+    font-size: 14px;
+    font-weight: 750;
+}
+
+.lesson-status {
+    padding: 6px 9px;
+
+    border-radius: 8px;
+
+    font-size: 12px;
+    font-weight: 700;
+}
+
+.status-upcoming {
+    background: rgba(46, 157, 98, 0.1);
+    color: var(--green);
+}
+
+.status-today {
+    background: rgba(236, 0, 140, 0.1);
+    color: var(--accent);
+}
+
+.status-past {
+    background: #f0f1f3;
+    color: var(--muted);
+}
+
+.lesson-card h2 {
+    margin: 20px 0 10px;
+
+    font-size: 20px;
+    line-height: 1.25;
+}
+
+.lesson-card p {
+    margin: 0;
+
+    color: var(--muted);
+
+    font-size: 14px;
+    line-height: 1.45;
+}
+
+.lesson-card-arrow {
+    position: absolute;
+
+    right: 22px;
+    bottom: 18px;
+
+    color: var(--accent);
+
+    font-size: 22px;
+    font-weight: 700;
+}
+
+
+/* =========================================================
+   СТРАНИЦА УРОКА
+   ========================================================= */
+
+.lesson-page {
+    padding-bottom: 60px;
+}
+
+.lesson-header {
+    padding: 45px 0 36px;
+}
+
+.lesson-header-date {
+    margin-bottom: 10px;
+
+    color: var(--accent);
+
+    font-size: 15px;
+    font-weight: 750;
+}
+
+.lesson-header h1 {
+    max-width: 950px;
+
+    margin: 0;
+
+    font-size: clamp(30px, 4vw, 44px);
+    line-height: 1.13;
+}
+
+.lesson-subtitle {
+    max-width: 850px;
+
+    margin: 15px 0 0;
+
+    color: var(--muted);
+
+    font-size: 17px;
+    line-height: 1.5;
+}
+
+
+/* =========================================================
+   МАТЕРИАЛЫ
+   ========================================================= */
+
+.materials-section {
+    margin-bottom: 46px;
+}
+
+.teacher-section {
+    padding-top: 10px;
+}
+
+.materials-grid {
+    display: grid;
+
+    grid-template-columns:
+        repeat(2, minmax(0, 1fr));
+
+    gap: 16px;
+}
+
+.material-card {
+    display: grid;
+
+    grid-template-columns:
+        auto minmax(0, 1fr);
+
+    grid-template-rows: auto auto;
+
+    column-gap: 17px;
+    row-gap: 17px;
+
+    padding: 22px;
+
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+
+    background: var(--surface);
+
+    transition:
+        transform 0.2s,
+        box-shadow 0.2s,
+        border-color 0.2s;
+}
+
+.material-card:hover {
+    transform: translateY(-2px);
+
+    border-color: rgba(236, 0, 140, 0.2);
+
+    box-shadow: var(--shadow);
+}
+
+.material-icon {
+    grid-row: 1 / 3;
+
+    width: 58px;
+    height: 58px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 16px;
+
+    background: #f3f4f6;
+
+    font-size: 27px;
+}
+
+.material-content {
+    min-width: 0;
+}
+
+.material-content h3 {
+    margin: 3px 0 7px;
+
+    font-size: 18px;
+    line-height: 1.25;
+}
+
+.material-content p {
+    margin: 0;
+
+    color: var(--muted);
+
+    font-size: 14px;
+    line-height: 1.45;
+}
+
+.material-button {
+    grid-column: 2;
+
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    min-height: 44px;
+
+    padding: 10px 15px;
+
+    border-radius: 11px;
+
+    background: var(--accent);
+    color: white;
+
+    font-size: 14px;
+    font-weight: 700;
+
+    transition:
+        background 0.2s,
+        transform 0.2s;
+}
+
+.material-button:hover {
+    background: var(--accent-dark);
+}
+
+.material-button:active {
+    transform: scale(0.98);
+}
+
+.material-button.disabled {
+    background: #e9eaed;
+    color: #92959c;
+
+    cursor: not-allowed;
+}
+
+
+/* =========================================================
+   ПАПКА GOOGLE DRIVE
+   ========================================================= */
+
+.admin-folder {
+    margin-top: 10px;
+
+    padding: 18px 20px;
+
+    border-radius: 16px;
+
+    background: #eef3fb;
+
+    color: #38669e;
+
+    font-size: 14px;
+    font-weight: 600;
+}
+
+.admin-folder a:hover {
+    text-decoration: underline;
+}
+
+
+/* =========================================================
+   ОШИБКИ
+   ========================================================= */
+
+.error-page {
+    min-height: 100vh;
+
+    display: flex;
+    flex-direction: column;
+
+    align-items: center;
+    justify-content: center;
+
+    padding: 30px;
+
+    text-align: center;
+}
+
+.error-icon {
+    font-size: 55px;
+
+    margin-bottom: 15px;
+}
+
+.error-page h1 {
+    margin: 0 0 10px;
+
+    font-size: 30px;
+}
+
+.error-page p {
+    max-width: 500px;
+
+    margin: 0 0 25px;
+
+    color: var(--muted);
+
+    line-height: 1.5;
+}
+
+.primary-button {
+    border: 0;
+
+    padding: 13px 20px;
+
+    border-radius: 12px;
+
+    background: var(--accent);
+    color: white;
+
+    font-size: 15px;
+    font-weight: 700;
+
+    cursor: pointer;
+}
+
+
+/* =========================================================
+   ПУСТОЕ СОСТОЯНИЕ
+   ========================================================= */
+
+.empty-state {
+    grid-column: 1 / -1;
+
+    padding: 40px;
+
+    border: 1px dashed var(--border);
+    border-radius: var(--radius);
+
+    background: var(--surface);
+
+    text-align: center;
+
+    color: var(--muted);
+}
+
+
+/* =========================================================
+   FOOTER
+   ========================================================= */
+
+.site-footer {
+    padding: 25px 20px;
+
+    border-top: 1px solid var(--border);
+
+    background: var(--surface);
+
+    text-align: center;
+
+    color: var(--muted);
+
+    font-size: 12px;
+}
+
+
+/* =========================================================
+   АДАПТИВНОСТЬ
+   ========================================================= */
+
+@media (max-width: 900px) {
+
+    .lessons-grid {
+        grid-template-columns:
+            repeat(2, minmax(0, 1fr));
+    }
+
+    .materials-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+
+@media (max-width: 600px) {
+
+    .container,
+    .brand {
+        width: min(100% - 24px, 1200px);
+    }
+
+    .brand {
+        min-height: 72px;
+    }
+
+    .brand-title {
+        font-size: 17px;
+    }
+
+    .brand-subtitle {
+        font-size: 13px;
+    }
+
+    .brand-mark {
+        min-width: 72px;
+
+        padding: 0 10px;
+
+        font-size: 12px;
+    }
+
+    .upcoming-section {
+        padding-top: 25px;
+    }
+
+    .upcoming-card {
+        padding: 25px;
+    }
+
+    .upcoming-card h1 {
+        font-size: 27px;
+    }
+
+    .lessons-section {
+        padding-top: 35px;
+    }
+
+    .lessons-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .lesson-card {
+        min-height: 190px;
+    }
+
+    .lesson-header {
+        padding-top: 30px;
+    }
+
+    .lesson-header h1 {
+        font-size: 30px;
+    }
+
+    .material-card {
+        padding: 18px;
+
+        grid-template-columns:
+            auto minmax(0, 1fr);
+    }
+
+    .material-icon {
+        width: 50px;
+        height: 50px;
+
+        font-size: 23px;
+    }
+}

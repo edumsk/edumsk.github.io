@@ -1,0 +1,1462 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0"> 
+<title>Рождение МС-21: 8 шагов к небу</title>
+<style>
+* { box-sizing: border-box; }
+
+:root {
+    --bg-card: rgba(255, 251, 240, 0.88);
+    --bg-card-strong: rgba(255,255,255,0.96);
+    --text-main: #2f2417;
+    --text-soft: #6f5a34;
+    --border: rgba(201, 178, 122, 0.45);
+    --shadow: 0 12px 32px rgba(0,0,0,0.10);
+    --accent: #d39b2d;
+    --accent-soft: rgba(211,155,45,0.14);
+    --green: #63be7b;
+    --green-dark: #4f9e63;
+    --red: #f36d6d;
+    --red-dark: #d95a5a;
+    --amber: #f1c45b;
+}
+
+html, body { min-height: 100%; }
+
+body {
+    margin: 0;
+    padding: 24px; 
+    font-family: Arial, sans-serif;
+    color: var(--text-main);
+    background: url('img/fon.jpg') no-repeat center center fixed;
+    background-size: cover;
+    overflow-x: hidden;
+}
+
+button { font-family: inherit; }
+
+.page-wrap {
+    max-width: 1440px;
+    margin: 0 auto;
+}
+
+.topbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    margin-bottom: 18px;
+    flex-wrap: wrap;
+}
+
+.title-block { text-align: left; }
+
+.page-title {
+    margin: 0;
+    font-size: 44px;
+    font-weight: 900;
+    letter-spacing: -0.02em;
+    color: var(--text-main);
+    text-shadow: 0 2px 0 rgba(255,255,255,0.6);
+}
+
+.page-subtitle {
+    display: inline-block;
+    margin-top: 8px;
+    padding: 8px 14px;
+    font-size: 18px;
+    line-height: 1.35;
+    color: var(--text-soft);
+    background: rgba(255,255,255,0.68);
+    border-radius: 14px;
+    backdrop-filter: blur(4px);
+}
+
+.top-actions {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.progress-badge {
+    min-width: 132px;
+    padding: 10px 16px;
+    border-radius: 999px;
+    background: rgba(255,251,240,0.92);
+    border: 1px solid var(--border);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.06);
+    font-size: 18px;
+    font-weight: 800;
+    text-align: center;
+}
+
+.reset-icon {
+    width: 48px;
+    height: 48px;
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    background: rgba(255,251,240,0.92) url('img/reset-icon.svg') no-repeat center center;
+    background-size: 24px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+    cursor: pointer;
+    transition: transform .15s ease, box-shadow .15s ease, background-color .2s ease;
+}
+
+.reset-icon:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 8px 18px rgba(0,0,0,0.12);
+    background-color: rgba(255,255,255,0.98);
+}
+
+.progress-line-wrap {
+    width: 100%;
+    height: 8px;
+    margin-bottom: 18px;
+    background: rgba(255,251,240,0.72);
+    border: 1px solid rgba(201,178,122,0.28);
+    border-radius: 999px;
+    overflow: hidden;
+}
+
+.progress-line {
+    height: 100%;
+    width: 0%;
+    border-radius: inherit;
+    background: linear-gradient(90deg, #d39b2d 0%, #f0c76a 100%);
+    transition: width .35s ease;
+}
+
+.screen { display: none; }
+.screen.active { display: block; animation: screenIn .28s ease; }
+
+@keyframes screenIn {
+    from { opacity: 0; transform: translateY(8px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.hero-card,
+.game-card,
+.final-card,
+.review-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 28px;
+    box-shadow: var(--shadow);
+    backdrop-filter: blur(6px);
+}
+
+.hero-card {
+    min-height: 610px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 48px 28px;
+}
+
+.hero-mark {
+    width: min(900px, 92%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 6px 0 34px;
+}
+
+.hero-node {
+    width: 48px;
+    height: 48px;
+    border-radius: 16px;
+    background: rgba(255,255,255,0.95);
+    border: 2px solid rgba(201,178,122,0.6);
+    box-shadow: 0 8px 18px rgba(0,0,0,0.07);
+    flex: 0 0 auto;
+}
+
+.hero-link {
+    height: 8px;
+    flex: 1 1 100px;
+    min-width: 34px;
+    border-radius: 999px;
+    background: linear-gradient(90deg, #d7c18d, #c8ab63);
+    position: relative;
+}
+
+.hero-link.broken {
+    background: transparent;
+}
+
+.hero-link.broken::before,
+.hero-link.broken::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    width: 42%;
+    height: 8px;
+    border-radius: 999px;
+    background: linear-gradient(90deg, #d7c18d, #c8ab63);
+}
+.hero-link.broken::before { left: 0; transform: rotate(7deg); transform-origin: left center; }
+.hero-link.broken::after { right: 0; transform: rotate(-7deg); transform-origin: right center; }
+
+.hero-title {
+    margin: 0;
+    font-size: clamp(46px, 6vw, 72px);
+    font-weight: 900;
+    letter-spacing: -0.04em;
+}
+
+.hero-text {
+    max-width: 900px;
+    margin: 18px auto 30px;
+    font-size: 23px;
+    line-height: 1.52;
+    color: var(--text-soft);
+}
+
+.primary-btn,
+.secondary-btn {
+    min-height: 58px;
+    padding: 15px 24px;
+    border-radius: 16px;
+    border: none;
+    cursor: pointer;
+    font-size: 19px;
+    font-weight: 800;
+    transition: transform .15s ease, box-shadow .15s ease, opacity .2s ease;
+}
+
+.primary-btn {
+    color: white;
+    background: linear-gradient(180deg, #8fd694 0%, var(--green) 100%);
+    box-shadow: 0 10px 20px rgba(79,158,99,0.22);
+}
+
+.primary-btn:hover,
+.secondary-btn:hover { transform: translateY(-1px); }
+.primary-btn:hover { box-shadow: 0 14px 24px rgba(79,158,99,0.28); }
+
+.secondary-btn {
+    color: var(--text-main);
+    background: rgba(255,255,255,0.94);
+    border: 1px solid var(--border);
+    box-shadow: 0 6px 14px rgba(0,0,0,0.06);
+}
+
+.game-card { padding: 24px; }
+
+.round-head {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 18px;
+    margin-bottom: 22px;
+}
+
+.round-copy { text-align: left; }
+
+.round-kicker {
+    display: inline-flex;
+    align-items: center;
+    padding: 8px 14px;
+    margin-bottom: 10px;
+    border-radius: 999px;
+    background: var(--accent-soft);
+    border: 1px solid rgba(211,155,45,0.22);
+    color: #7a5718;
+    font-size: 15px;
+    font-weight: 800;
+}
+
+.round-title {
+    margin: 0 0 8px;
+    font-size: 34px;
+    font-weight: 900;
+}
+
+.round-context {
+    margin: 0;
+    max-width: 1020px;
+    font-size: 19px;
+    line-height: 1.5;
+    color: var(--text-soft);
+}
+
+.instruction-badge {
+    flex: 0 0 auto;
+    max-width: 290px;
+    padding: 11px 14px;
+    border-radius: 16px;
+    background: rgba(255,255,255,0.72);
+    border: 1px solid rgba(201,178,122,0.34);
+    color: var(--text-soft);
+    font-size: 15px;
+    line-height: 1.35;
+    font-weight: 700;
+    text-align: center;
+}
+
+.chain-wrap {
+    position: relative;
+    padding: 18px 0 10px;
+}
+
+.chain {
+    display: flex;
+    align-items: stretch;
+    gap: 0;
+}
+
+.action-card {
+    flex: 1 1 0;
+    min-width: 0;
+}
+
+.action-card {
+    position: relative;
+    min-height: 245px;
+    padding: 54px 18px 22px;
+    border: 1.5px solid rgba(201,178,122,0.56);
+    border-radius: 22px;
+    background: linear-gradient(180deg, rgba(255,255,255,0.98) 0%, rgba(255,252,244,0.96) 100%);
+    color: var(--text-main);
+    box-shadow: 0 8px 18px rgba(0,0,0,0.07);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    font-size: 18px;
+    line-height: 1.4;
+    font-weight: 800;
+    transition: transform .18s ease, box-shadow .18s ease, border-color .2s ease, background .2s ease, color .2s ease, opacity .2s ease;
+    user-select: none;
+}
+
+.action-card:hover:not(.locked):not(.correct) {
+    transform: translateY(-4px) scale(1.008);
+    box-shadow: 0 16px 28px rgba(0,0,0,0.12), 0 0 0 3px rgba(211,155,45,0.06);
+    border-color: rgba(211,155,45,0.78);
+}
+
+.action-card:focus-visible {
+    outline: none;
+    border-color: rgba(211,155,45,0.95);
+    box-shadow: 0 0 0 4px rgba(211,155,45,0.16), 0 12px 24px rgba(0,0,0,0.10);
+}
+
+.action-card.restored-wave {
+    animation: restoredCardPulse .66s ease both;
+}
+
+@keyframes restoredCardPulse {
+    0% { transform: translateY(0); box-shadow: 0 8px 18px rgba(0,0,0,0.07); }
+    42% { transform: translateY(-3px); box-shadow: 0 13px 28px rgba(79,158,99,0.22), 0 0 0 4px rgba(99,190,123,0.12); }
+    100% { transform: translateY(0); box-shadow: 0 8px 18px rgba(0,0,0,0.07); }
+}
+
+.action-card .step-num {
+    position: absolute;
+    top: 14px;
+    left: 14px;
+    width: 34px;
+    height: 34px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 12px;
+    background: rgba(255,248,230,0.96);
+    border: 1px solid rgba(211,155,45,0.28);
+    color: #7a5718;
+    font-size: 15px;
+    font-weight: 900;
+}
+
+.action-card.wrong {
+    animation: cardShake .34s ease;
+    border-color: rgba(211,155,45,0.9);
+    background: linear-gradient(180deg,#fff8dd 0%, #fff0b9 100%);
+}
+
+@keyframes cardShake {
+    0%,100% { transform: translateX(0); }
+    25% { transform: translateX(-6px); }
+    75% { transform: translateX(6px); }
+}
+
+.action-card.breaking {
+    animation: weakDrop .48s ease forwards;
+}
+
+@keyframes weakDrop {
+    0% { transform: translateY(0) rotate(0); }
+    55% { transform: translateY(10px) rotate(-1.5deg); }
+    100% { transform: translateY(4px) rotate(0); }
+}
+
+.action-card.correct {
+    color: white;
+    border-color: var(--green-dark);
+    background: linear-gradient(180deg, #9ae09e 0%, var(--green) 100%);
+    box-shadow: 0 12px 26px rgba(79,158,99,0.18);
+}
+
+.action-card.correct .step-num {
+    color: white;
+    background: rgba(255,255,255,0.18);
+    border-color: rgba(255,255,255,0.35);
+}
+
+.action-card.weak-found {
+    color: white;
+    border-color: var(--red-dark);
+    background: linear-gradient(180deg, #ff9b9b 0%, var(--red) 100%);
+    box-shadow: 0 12px 26px rgba(217,90,90,0.18);
+}
+
+.action-card.weak-found .step-num {
+    color: white;
+    background: rgba(255,255,255,0.18);
+    border-color: rgba(255,255,255,0.35);
+}
+
+.action-card.locked { cursor: default; }
+.action-card.dimmed { opacity: .78; }
+
+.chain-link {
+    position: relative;
+    flex: 0 0 54px;
+    min-width: 54px;
+}
+
+.chain-link::before {
+    content: "";
+    position: absolute;
+    left: 5px;
+    right: 5px;
+    top: 50%;
+    height: 8px;
+    border-radius: 999px;
+    background: linear-gradient(90deg, #d8c38f, #c8a95e);
+    transform: translateY(-50%);
+    transition: opacity .22s ease, transform .22s ease, background .25s ease;
+}
+
+.chain-link::after {
+    content: "";
+    position: absolute;
+    right: 2px;
+    top: 50%;
+    width: 13px;
+    height: 13px;
+    border-top: 4px solid #c8a95e;
+    border-right: 4px solid #c8a95e;
+    transform: translateY(-50%) rotate(45deg);
+    transition: opacity .22s ease, border-color .25s ease;
+}
+
+.chain-link.broken::before {
+    left: 4px;
+    right: auto;
+    width: 36%;
+    transform: translateY(-50%) rotate(7deg);
+}
+
+.chain-link.broken::after {
+    right: 5px;
+    width: 13px;
+    height: 13px;
+    border-color: #c8a95e;
+    transform: translateY(-50%) rotate(45deg);
+}
+
+.chain-link.broken span {
+    position: absolute;
+    right: 6px;
+    top: 50%;
+    width: 34%;
+    height: 8px;
+    border-radius: 999px;
+    background: linear-gradient(90deg, #d8c38f, #c8a95e);
+    transform: translateY(-50%) rotate(-7deg);
+}
+
+.chain-link.repaired::before {
+    background: linear-gradient(90deg, #76c987, #4f9e63);
+    animation: linkGlow .6s ease;
+}
+.chain-link.repaired::after { border-color: #4f9e63; }
+
+@keyframes linkGlow {
+    0% { box-shadow: 0 0 0 rgba(79,158,99,0); filter: brightness(1); }
+    45% { box-shadow: 0 0 28px rgba(79,158,99,.62); filter: brightness(1.22); }
+    100% { box-shadow: 0 0 0 rgba(79,158,99,0); filter: brightness(1); }
+}
+
+.chain-link.repaired {
+    animation: repairedLinkLift .48s ease both;
+}
+
+@keyframes repairedLinkLift {
+    0% { transform: scale(.94); opacity: .72; }
+    60% { transform: scale(1.045); opacity: 1; }
+    100% { transform: scale(1); opacity: 1; }
+}
+
+.hint-area {
+    min-height: 76px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding-top: 12px;
+}
+
+.hint-toast {
+    max-width: 760px;
+    padding: 14px 18px;
+    border-radius: 16px;
+    background: rgba(255,248,224,0.96);
+    border: 1px solid rgba(211,155,45,0.42);
+    color: #6b4d10;
+    font-size: 17px;
+    line-height: 1.4;
+    font-weight: 700;
+    box-shadow: 0 8px 18px rgba(0,0,0,0.06);
+    opacity: 0;
+    transform: translateY(8px);
+    pointer-events: none;
+    transition: opacity .18s ease, transform .18s ease;
+}
+
+.hint-toast.show { opacity: 1; transform: translateY(0); }
+
+.success-panel {
+    display: none;
+    margin-top: 8px;
+    padding: 20px;
+    border-radius: 22px;
+    background: rgba(246,255,246,0.96);
+    border: 1px solid rgba(79,158,99,0.34);
+    box-shadow: 0 8px 18px rgba(79,158,99,0.08);
+    text-align: left;
+}
+
+.success-panel.show { display: block; animation: panelIn .32s ease; }
+
+@keyframes panelIn {
+    from { opacity: 0; transform: translateY(8px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.success-row {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 20px;
+}
+
+.success-copy { max-width: 1000px; }
+
+.success-title {
+    margin: 0 0 8px;
+    font-size: 22px;
+    color: var(--green-dark);
+    font-weight: 900;
+}
+
+.success-text {
+    margin: 0;
+    font-size: 18px;
+    line-height: 1.52;
+    color: var(--text-main);
+}
+
+.principle-pill {
+    display: inline-flex;
+    margin-top: 14px;
+    padding: 8px 13px;
+    border-radius: 999px;
+    background: rgba(99,190,123,0.12);
+    border: 1px solid rgba(79,158,99,0.25);
+    color: var(--green-dark);
+    font-size: 15px;
+    font-weight: 900;
+}
+
+.final-card { padding: 42px 28px; text-align: center; }
+.final-kicker {
+    display: inline-flex;
+    padding: 8px 14px;
+    border-radius: 999px;
+    background: rgba(99,190,123,0.12);
+    border: 1px solid rgba(79,158,99,0.24);
+    color: var(--green-dark);
+    font-size: 16px;
+    font-weight: 900;
+}
+.final-title { margin: 18px 0 10px; font-size: clamp(38px,5vw,58px); font-weight: 900; line-height: 1.05; }
+.final-subtitle { margin: 0 auto 30px; max-width: 900px; color: var(--text-soft); font-size: 20px; line-height: 1.5; }
+
+.principles {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0,1fr));
+    gap: 16px;
+    margin: 26px 0 30px;
+}
+
+.principle-card {
+    min-height: 150px;
+    padding: 24px 16px;
+    border-radius: 20px;
+    background: rgba(255,255,255,0.82);
+    border: 1px solid rgba(201,178,122,0.38);
+    box-shadow: 0 7px 16px rgba(0,0,0,0.05);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+}
+
+.final-card.celebrate .principle-card {
+    animation: principleRise .64s cubic-bezier(.2,.8,.2,1) both;
+}
+.final-card.celebrate .principle-card:nth-child(1) { animation-delay: .14s; }
+.final-card.celebrate .principle-card:nth-child(2) { animation-delay: .36s; }
+.final-card.celebrate .principle-card:nth-child(3) { animation-delay: .58s; }
+
+@keyframes principleRise {
+    from { opacity: 0; transform: translateY(16px) scale(.96); }
+    70% { opacity: 1; transform: translateY(-2px) scale(1.012); }
+    to { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+.principle-check {
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    background: linear-gradient(180deg,#8fd694,var(--green));
+    font-size: 24px;
+    font-weight: 900;
+}
+
+.principle-name { font-size: 20px; line-height: 1.3; font-weight: 900; }
+
+.formula {
+    margin: 0 auto 28px;
+    padding: 20px 24px;
+    max-width: 980px;
+    border-radius: 22px;
+    background: linear-gradient(180deg,#fff5cf 0%, #f2d57d 100%);
+    border: 1px solid rgba(211,155,45,0.34);
+    color: #543d10;
+    font-size: clamp(22px,3vw,34px);
+    line-height: 1.35;
+    font-weight: 900;
+}
+
+.final-card.celebrate .formula {
+    animation: formulaReveal .7s .92s cubic-bezier(.2,.8,.2,1) both;
+}
+.final-card.celebrate .final-actions {
+    animation: finalActionsReveal .55s 1.12s ease both;
+}
+
+@keyframes formulaReveal {
+    from { opacity: 0; transform: translateY(12px) scale(.985); box-shadow: 0 0 0 rgba(211,155,45,0); }
+    60% { opacity: 1; transform: translateY(0) scale(1.008); box-shadow: 0 12px 30px rgba(211,155,45,.18); }
+    to { opacity: 1; transform: translateY(0) scale(1); box-shadow: 0 0 0 rgba(211,155,45,0); }
+}
+
+@keyframes finalActionsReveal {
+    from { opacity: 0; transform: translateY(8px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.final-actions,
+.review-actions {
+    display: flex;
+    justify-content: center;
+    gap: 12px;
+    flex-wrap: wrap;
+}
+
+.review-card { padding: 28px; }
+.review-title { margin: 0 0 8px; font-size: 36px; font-weight: 900; text-align: left; }
+.review-subtitle { margin: 0 0 24px; color: var(--text-soft); font-size: 18px; line-height: 1.45; text-align: left; }
+.review-list { display: grid; gap: 18px; }
+.review-round {
+    padding: 20px;
+    border-radius: 22px;
+    background: rgba(255,255,255,0.78);
+    border: 1px solid rgba(201,178,122,0.34);
+}
+.review-round-title { margin: 0 0 14px; font-size: 22px; font-weight: 900; text-align: left; }
+.review-chain {
+    display: grid;
+    grid-template-columns: repeat(5,minmax(0,1fr));
+    gap: 10px;
+}
+.review-step {
+    min-height: 112px;
+    padding: 12px;
+    border-radius: 16px;
+    background: rgba(255,252,245,0.96);
+    border: 1px solid rgba(201,178,122,0.36);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    font-size: 14px;
+    line-height: 1.35;
+    font-weight: 700;
+}
+.review-step.fixed {
+    color: white;
+    background: linear-gradient(180deg,#9ae09e,var(--green));
+    border-color: var(--green-dark);
+}
+.review-principle {
+    margin-top: 12px;
+    color: var(--green-dark);
+    font-size: 15px;
+    font-weight: 900;
+    text-align: right;
+}
+.review-actions { margin-top: 24px; }
+
+.firework {
+    position: fixed;
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    pointer-events: none;
+    z-index: 9999;
+    animation: firework 700ms ease-out forwards;
+    box-shadow:
+        0 -18px 0 0 currentColor,
+        0 18px 0 0 currentColor,
+        18px 0 0 0 currentColor,
+        -18px 0 0 0 currentColor,
+        13px 13px 0 0 currentColor,
+        -13px -13px 0 0 currentColor,
+        13px -13px 0 0 currentColor,
+        -13px 13px 0 0 currentColor;
+}
+
+@keyframes firework {
+    from { transform: scale(.2); opacity: 1; }
+    to { transform: scale(1.8); opacity: 0; }
+}
+
+
+.stage-rail {
+    display: grid;
+    grid-template-columns: repeat(8, minmax(0, 1fr));
+    gap: 7px;
+    margin: -6px 0 18px;
+}
+
+.stage-chip {
+    min-width: 0;
+    min-height: 38px;
+    padding: 7px 8px;
+    border-radius: 12px;
+    border: 1px solid rgba(201,178,122,0.34);
+    background: rgba(255,251,240,0.66);
+    color: rgba(111,90,52,0.62);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    text-align: center;
+    font-size: 12px;
+    line-height: 1.2;
+    font-weight: 800;
+    transition: background .22s ease, border-color .22s ease, color .22s ease, transform .22s ease;
+}
+
+.stage-chip::before {
+    content: attr(data-step);
+    flex: 0 0 19px;
+    width: 19px;
+    height: 19px;
+    border-radius: 50%;
+    display: grid;
+    place-items: center;
+    background: rgba(201,178,122,0.20);
+    color: #806a42;
+    font-size: 10px;
+    font-weight: 900;
+}
+
+.stage-chip.active {
+    color: #6f5119;
+    border-color: rgba(211,155,45,0.48);
+    background: rgba(255,244,207,0.88);
+    transform: translateY(-1px);
+}
+
+.stage-chip.active::before {
+    background: var(--accent);
+    color: white;
+}
+
+.stage-chip.done {
+    color: var(--green-dark);
+    border-color: rgba(79,158,99,0.34);
+    background: rgba(243,255,243,0.90);
+}
+
+.stage-chip.done::before {
+    content: "✓";
+    background: var(--green);
+    color: white;
+}
+
+.final-question {
+    max-width: 980px;
+    margin: 26px auto 30px;
+    padding: 22px 24px;
+    border-radius: 22px;
+    background: linear-gradient(180deg,#fff5cf 0%, #f2d57d 100%);
+    border: 1px solid rgba(211,155,45,0.34);
+    color: #543d10;
+    text-align: left;
+}
+
+.final-question-label {
+    margin-bottom: 8px;
+    font-size: 15px;
+    font-weight: 900;
+    text-transform: uppercase;
+    letter-spacing: .04em;
+}
+
+.final-question-text {
+    margin: 0;
+    font-size: clamp(20px,2.4vw,28px);
+    line-height: 1.4;
+    font-weight: 900;
+}
+
+.review-step.weak {
+    color: white;
+    background: linear-gradient(180deg,#ff9b9b,var(--red));
+    border-color: var(--red-dark);
+}
+
+.review-explanation {
+    margin-top: 12px;
+    padding: 12px 14px;
+    border-radius: 14px;
+    background: rgba(255,255,255,0.72);
+    border: 1px solid rgba(201,178,122,0.30);
+    color: var(--text-main);
+    font-size: 15px;
+    line-height: 1.45;
+    text-align: left;
+}
+
+@media (max-width: 1180px) {
+    .chain {
+        flex-direction: column;
+        gap: 0;
+    }
+    .action-card { min-height: 145px; padding: 45px 20px 18px; }
+    .chain-link { flex: 0 0 54px; min-width: 0; height: 54px; }
+    .chain-link::before {
+        left: 50%; right: auto; top: 5px; bottom: 5px;
+        width: 8px; height: auto;
+        transform: translateX(-50%);
+        background: linear-gradient(180deg,#d8c38f,#c8a95e);
+    }
+    .chain-link::after {
+        right: auto; left: 50%; top: auto; bottom: 3px;
+        transform: translateX(-50%) rotate(135deg);
+    }
+    .chain-link.broken::before {
+        left: 50%; right: auto; top: 4px; width: 8px; height: 36%;
+        transform: translateX(-50%) rotate(7deg);
+    }
+    .chain-link.broken span {
+        left: 50%; right: auto; top: auto; bottom: 4px; width: 8px; height: 34%;
+        transform: translateX(-50%) rotate(-7deg);
+        background: linear-gradient(180deg,#d8c38f,#c8a95e);
+    }
+    .round-head { flex-direction: column; }
+    .instruction-badge { max-width: none; width: 100%; }
+    .stage-rail { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+}
+
+@media (max-width: 800px) {
+    body { padding: 16px; }
+    .page-title { font-size: 34px; }
+    .page-subtitle { font-size: 16px; }
+    .hero-card { min-height: 520px; padding: 36px 18px; }
+    .hero-text { font-size: 19px; }
+    .game-card { padding: 16px; }
+    .round-title { font-size: 29px; }
+    .round-context { font-size: 17px; }
+    .success-row { flex-direction: column; }
+    .success-row .primary-btn { width: 100%; }
+    .principles { grid-template-columns: 1fr; }
+    .review-chain { grid-template-columns: 1fr; }
+    .review-step { min-height: 86px; }
+    .stage-rail { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .stage-chip { font-size: 11px; }
+}
+</style>
+</head>
+<body>
+<div class="page-wrap">
+    <div class="topbar" id="topbar">
+        <div class="title-block">
+            <h1 class="page-title">Рождение МС-21: 8 шагов к небу</h1>
+            <div class="page-subtitle" id="page-subtitle">Найдите слабое звено на каждом этапе создания пассажирского самолёта.</div>
+        </div>
+        <div class="top-actions">
+            <div class="progress-badge" id="progress-badge">Старт</div>
+            <button class="reset-icon" id="reset-button" type="button" aria-label="Начать заново" title="Начать заново"></button>
+        </div>
+    </div>
+
+    <div class="progress-line-wrap" id="progress-wrap">
+        <div class="progress-line" id="progress-line"></div>
+    </div>
+    <div class="stage-rail" id="stage-rail" aria-label="Этапы создания МС-21"></div>
+
+    <section class="screen active" id="start-screen">
+        <div class="hero-card">
+            <div class="hero-mark" aria-hidden="true">
+                <div class="hero-node"></div><div class="hero-link"></div>
+                <div class="hero-node"></div><div class="hero-link"></div>
+                <div class="hero-node"></div><div class="hero-link broken"></div>
+                <div class="hero-node"></div><div class="hero-link"></div>
+                <div class="hero-node"></div>
+            </div>
+            <h2 class="hero-title">8 шагов к небу</h2>
+            <p class="hero-text">Создание пассажирского самолёта — это длинный путь, в котором участвуют инженеры, конструкторы, испытатели и многие другие специалисты. Каждый этап важен: ошибка на одном из них может повлиять на всю дальнейшую работу.</p>
+            <p class="hero-text" style="margin-top:-14px;">Сегодня вам предстоит пройти путь создания МС-21 — от замысла до полёта. На каждом этапе перед вами будут четыре действия. Одно из них — слабое звено: ошибка, неточность или неправильное решение.</p>
+            <p class="hero-text" style="margin-top:-14px;">Ваша задача — найти слабое звено и помочь создателям перейти к следующему этапу.</p>
+            <button class="primary-btn" id="start-button" type="button">Начать</button>
+        </div>
+    </section>
+
+    <section class="screen" id="round-screen">
+        <div class="game-card">
+            <div class="round-head">
+                <div class="round-copy">
+                    <div class="round-kicker" id="round-kicker">Этап</div>
+                    <h2 class="round-title" id="round-title"></h2>
+                    <p class="round-context" id="round-context"></p>
+                </div>
+                <div class="instruction-badge">Выберите одно действие, которое является ошибкой, неточностью или неправильным решением.</div>
+            </div>
+
+            <div class="chain-wrap">
+                <div class="chain" id="chain"></div>
+            </div>
+
+            <div class="hint-area">
+                <div class="hint-toast" id="hint-toast"></div>
+            </div>
+
+            <div class="success-panel" id="success-panel">
+                <div class="success-row">
+                    <div class="success-copy">
+                        <h3 class="success-title">✓ Слабое звено найдено</h3>
+                        <p class="success-text" id="success-text"></p>
+                        <div class="principle-pill" id="principle-pill"></div>
+                    </div>
+                    <button class="primary-btn" id="next-button" type="button">Дальше →</button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="screen" id="final-screen">
+        <div class="final-card">
+            <div class="final-kicker">8 из 8 этапов пройдены</div>
+            <h2 class="final-title">МС-21 готов к полёту!</h2>
+            <p class="final-subtitle">Все основные этапы пройдены: от замысла и проектирования до сертификации и полёта.</p>
+
+            <div class="final-question">
+                <div class="final-question-label">Финальный вопрос</div>
+                <p class="final-question-text">Представьте, что серьёзную ошибку обнаружили только во время испытаний самолёта. На каком из предыдущих этапов могла возникнуть её настоящая причина? Может ли быть несколько вариантов?</p>
+            </div>
+
+            <div class="final-actions">
+                <button class="secondary-btn" id="review-button" type="button">Посмотреть этапы</button>
+                <button class="primary-btn" id="restart-button" type="button">Начать заново</button>
+            </div>
+        </div>
+    </section>
+
+    <section class="screen" id="review-screen">
+        <div class="review-card">
+            <h2 class="review-title">Пройденные этапы</h2>
+            <p class="review-subtitle">Слабые звенья отмечены красным. Ниже сохранены пояснения после каждого ответа.</p>
+            <div class="review-list" id="review-list"></div>
+            <div class="review-actions">
+                <button class="secondary-btn" id="back-final-button" type="button">← К итогу</button>
+                <button class="primary-btn" id="restart-button-2" type="button">Начать заново</button>
+            </div>
+        </div>
+    </section>
+</div>
+
+<audio id="success-sound" src="sound/goodAnswer.mp3" preload="auto"></audio>
+<audio id="fail-sound" src="sound/badAnswer.mp3" preload="auto"></audio>
+<audio id="final-sound" src="sound/right.mp3" preload="auto"></audio>
+
+<script>
+const gameData = {
+    title: "Рождение МС-21: 8 шагов к небу",
+    stageNames: ["Замысел", "Проектирование", "Материалы", "Производство", "Сборка", "Испытания", "Сертификация", "Полёт"],
+    rounds: [
+        {
+            title: "Замысел",
+            context: "Инженеры решают, каким должен быть новый пассажирский самолёт. Где слабое звено?",
+            cards: [
+                "Сделать полёт комфортным для пассажиров.",
+                "Добиться максимальной скорости, даже если самолёт будет расходовать намного больше топлива.",
+                "Сделать самолёт безопасным.",
+                "Снизить расход топлива."
+            ],
+            weakIndex: 1,
+            weakLetter: "Б",
+            explanation: "Современные пассажирские самолёты обычно летают со скоростью около 800–900 км/ч. Сегодня инженеры стремятся не устанавливать рекорды скорости, а сделать самолёт безопасным, комфортным и экономичным. Интересный факт: современный самолёт может расходовать около 20 г топлива на одного пассажира на 1 км пути."
+        },
+        {
+            title: "Проектирование",
+            context: "Начинается проектирование МС-21. Где слабое звено?",
+            cards: [
+                "Сначала изготовить настоящее крыло, а необходимые расчёты провести потом.",
+                "Рассчитать форму крыла.",
+                "Создать цифровую модель самолёта.",
+                "Проверить расчёты с помощью компьютеров."
+            ],
+            weakIndex: 0,
+            weakLetter: "А",
+            explanation: "МС-21 проектировали с использованием современных цифровых технологий. Инженеры могут заранее проверить множество решений ещё до изготовления настоящих деталей. Это помогает раньше заметить ошибки и изменить конструкцию."
+        },
+        {
+            title: "Материалы и технологии",
+            context: "Инженеры выбирают материалы для самолёта. Где слабое звено?",
+            cards: [
+                "Материал крыла должен быть прочным.",
+                "Для самолёта важно уменьшать лишний вес.",
+                "Чем тяжелее материал, тем лучше будет летать самолёт.",
+                "Для крыла можно использовать современные композиционные материалы."
+            ],
+            weakIndex: 2,
+            weakLetter: "В",
+            explanation: "Одна из особенностей МС-21 — так называемое «чёрное крыло» из композиционных материалов. Такие материалы позволяют сочетать высокую прочность и небольшую массу. Логика проста: меньше масса самолёта → меньше топлива требуется для полёта."
+        },
+        {
+            title: "Производство деталей и систем",
+            context: "Начинается производство частей будущего самолёта. Где слабое звено?",
+            cards: [
+                "Изготавливают двигатель.",
+                "Если какой-то важной детали нет, самолёт можно собрать без неё.",
+                "Производят электронные системы и оборудование.",
+                "Проверяют изготовленные детали."
+            ],
+            weakIndex: 1,
+            weakLetter: "Б",
+            explanation: "Самолёт состоит из огромного количества деталей и систем, каждая из которых выполняет свою задачу. Один из важнейших элементов МС-21 — российский двигатель ПД-14. Число 14 в его названии связано с классом тяги двигателя — около 14 тонн-сил. Способность самостоятельно создавать ключевые системы самолёта важна для технологической независимости страны."
+        },
+        {
+            title: "Сборка",
+            context: "Детали готовы. Начинается сборка самолёта. Где слабое звено?",
+            cards: [
+                "Части самолёта точно соединяют друг с другом.",
+                "Проверяют правильность установки деталей.",
+                "Используют специальное оборудование для точной сборки.",
+                "Если две детали немного не совпадают, их можно просто сильнее прижать друг к другу."
+            ],
+            weakIndex: 3,
+            weakLetter: "Г",
+            explanation: "При сборке самолёта нужна очень высокая точность. Даже если самолёт огромный, небольшие отклонения размеров отдельных деталей могут повлиять на то, как соединяются и работают разные элементы конструкции."
+        },
+        {
+            title: "Испытания",
+            context: "Самолёт собран. Теперь его нужно испытать. Где слабое звено?",
+            cards: [
+                "Если самолёт выглядит исправным, часть испытаний можно не проводить.",
+                "Проверить прочность крыла.",
+                "Испытать работу систем при низких температурах.",
+                "Проверить работу оборудования на специальных стендах."
+            ],
+            weakIndex: 0,
+            weakLetter: "А",
+            explanation: "Перед эксплуатацией самолёт проходит множество испытаний. Например, конструкцию проверяют нагрузками, которые могут быть значительно выше тех, с которыми самолёт обычно сталкивается в полёте. Ориентир при некоторых проверках прочности — примерно 1,5-кратный запас относительно расчётных предельных нагрузок. Это позволяет проверить конструкцию с запасом прочности."
+        },
+        {
+            title: "Контроль качества и сертификация",
+            context: "Испытания закончились. Специалисты изучают результаты. Где слабое звено?",
+            cards: [
+                "Изучить результаты всех проверок.",
+                "Исправить найденные недостатки.",
+                "Небольшое замечание можно не исправлять, если остальные системы работают хорошо.",
+                "После исправлений провести необходимые повторные проверки."
+            ],
+            weakIndex: 2,
+            weakLetter: "В",
+            explanation: "Чтобы самолёт допустили к эксплуатации, недостаточно сказать: «Мы уверены, что он безопасен». Безопасность необходимо подтвердить расчётами, испытаниями, документами и результатами проверок."
+        },
+        {
+            title: "Полёт",
+            context: "Все основные этапы пройдены. Самолёт готовится к полёту. Где слабое звено?",
+            cards: [
+                "Перед полётом проверяют состояние самолёта и его систем.",
+                "Учитывают результаты предыдущих испытаний и проверок.",
+                "Самолёт допускают к полёту только после выполнения необходимых требований.",
+                "Если самолёт уже однажды успешно летал, перед следующими полётами проверки больше не нужны."
+            ],
+            weakIndex: 3,
+            weakLetter: "Г",
+            explanation: "Все основные этапы пройдены. После выполнения необходимых требований самолёт готов к полёту."
+        }
+    ]
+};
+
+const startScreen = document.getElementById('start-screen');
+const roundScreen = document.getElementById('round-screen');
+const finalScreen = document.getElementById('final-screen');
+const reviewScreen = document.getElementById('review-screen');
+const progressBadge = document.getElementById('progress-badge');
+const progressLine = document.getElementById('progress-line');
+const progressWrap = document.getElementById('progress-wrap');
+const stageRail = document.getElementById('stage-rail');
+const roundKicker = document.getElementById('round-kicker');
+const roundTitle = document.getElementById('round-title');
+const roundContext = document.getElementById('round-context');
+const chain = document.getElementById('chain');
+const hintToast = document.getElementById('hint-toast');
+const successPanel = document.getElementById('success-panel');
+const successText = document.getElementById('success-text');
+const principlePill = document.getElementById('principle-pill');
+const nextButton = document.getElementById('next-button');
+const reviewList = document.getElementById('review-list');
+
+let currentRound = 0;
+let roundSolved = false;
+let hintTimer = null;
+let finalCelebrationPlayed = false;
+
+
+const typographyShortWords = [
+    'а', 'и', 'но',
+    'в', 'во', 'к', 'ко', 'с', 'со', 'у', 'о', 'об', 'обо',
+    'на', 'по', 'за', 'из', 'изо', 'от', 'ото', 'до',
+    'под', 'над', 'при', 'про', 'для', 'без', 'не'
+];
+
+const typographyPattern = new RegExp(
+    `(^|\\s)(${typographyShortWords.join('|')})\\s+(?=\\S)`,
+    'giu'
+);
+
+function typograph(text) {
+    return String(text ?? '').replace(typographyPattern, '$1$2\u00A0');
+}
+
+function setTypographedText(element, text) {
+    if (element) element.textContent = typograph(text);
+}
+
+function applyTypography(root = document.body) {
+    const walker = document.createTreeWalker(root, NodeFilter.SHOW_TEXT);
+    const nodes = [];
+
+    while (walker.nextNode()) nodes.push(walker.currentNode);
+
+    nodes.forEach(node => {
+        const parent = node.parentElement;
+        if (!parent || ['SCRIPT', 'STYLE', 'TEXTAREA', 'INPUT'].includes(parent.tagName)) return;
+        node.nodeValue = typograph(node.nodeValue);
+    });
+}
+
+function showScreen(screen) {
+    [startScreen, roundScreen, finalScreen, reviewScreen].forEach(el => el.classList.remove('active'));
+    screen.classList.add('active');
+}
+
+function safePlay(id) {
+    const audio = document.getElementById(id);
+    if (!audio) return;
+    try {
+        audio.currentTime = 0;
+        const p = audio.play();
+        if (p && typeof p.catch === 'function') p.catch(() => {});
+    } catch (e) {}
+}
+
+function renderStageRail(mode = 'start') {
+    stageRail.innerHTML = '';
+    gameData.stageNames.forEach((name, index) => {
+        const chip = document.createElement('div');
+        chip.className = 'stage-chip';
+        chip.dataset.step = index + 1;
+        setTypographedText(chip, name);
+
+        if (mode === 'final' || index < currentRound || (mode === 'round' && index === currentRound && roundSolved)) {
+            chip.classList.add('done');
+        }
+        if (mode === 'round' && index === currentRound) {
+            chip.classList.add('active');
+        }
+        stageRail.appendChild(chip);
+    });
+}
+
+function updateProgress(mode = 'round') {
+    if (mode === 'start') {
+        setTypographedText(progressBadge, 'Старт');
+        progressLine.style.width = '0%';
+        renderStageRail('start');
+        return;
+    }
+    if (mode === 'final') {
+        setTypographedText(progressBadge, '8 из 8');
+        progressLine.style.width = '100%';
+        renderStageRail('final');
+        return;
+    }
+    const num = currentRound + 1;
+    setTypographedText(progressBadge, `Этап ${num} из ${gameData.rounds.length}`);
+    progressLine.style.width = `${(currentRound / gameData.rounds.length) * 100}%`;
+    renderStageRail('round');
+}
+
+function startGame() {
+    currentRound = 0;
+    finalCelebrationPlayed = false;
+    renderRound();
+    showScreen(roundScreen);
+}
+
+function renderRound() {
+    roundSolved = false;
+    clearTimeout(hintTimer);
+    hintToast.classList.remove('show');
+    successPanel.classList.remove('show');
+
+    const data = gameData.rounds[currentRound];
+    setTypographedText(roundKicker, `Этап ${currentRound + 1} из ${gameData.rounds.length}`);
+    setTypographedText(roundTitle, data.title);
+    setTypographedText(roundContext, data.context);
+    setTypographedText(successText, data.explanation);
+    setTypographedText(principlePill, `Слабое звено: ${data.weakLetter}`);
+    setTypographedText(nextButton, currentRound === gameData.rounds.length - 1 ? 'К итогу →' : 'Дальше →');
+
+    chain.innerHTML = '';
+
+    data.cards.forEach((text, index) => {
+        const card = document.createElement('button');
+        card.type = 'button';
+        card.className = 'action-card';
+        card.dataset.index = index;
+        card.innerHTML = `<span class="step-num">${index + 1}</span><span class="card-text"></span>`;
+        setTypographedText(card.querySelector('.card-text'), text);
+        card.addEventListener('click', () => chooseCard(index, card));
+        chain.appendChild(card);
+
+        if (index < data.cards.length - 1) {
+            const link = document.createElement('div');
+            link.className = 'chain-link';
+            link.dataset.linkIndex = index;
+            link.innerHTML = '<span></span>';
+            chain.appendChild(link);
+        }
+    });
+
+    updateProgress('round');
+}
+
+function chooseCard(index, card) {
+    if (roundSolved) return;
+    const data = gameData.rounds[currentRound];
+
+    if (index !== data.weakIndex) {
+        safePlay('fail-sound');
+        card.classList.remove('wrong');
+        void card.offsetWidth;
+        card.classList.add('wrong');
+        showHint('Это не слабое звено. Попробуйте ещё раз.');
+        setTimeout(() => card.classList.remove('wrong'), 620);
+        return;
+    }
+
+    solveRound(card, data);
+}
+
+function showHint(text) {
+    clearTimeout(hintTimer);
+    setTypographedText(hintToast, text);
+    hintToast.classList.add('show');
+    hintTimer = setTimeout(() => hintToast.classList.remove('show'), 3600);
+}
+
+function solveRound(card, data) {
+    roundSolved = true;
+    clearTimeout(hintTimer);
+    hintToast.classList.remove('show');
+
+    const cards = Array.from(chain.querySelectorAll('.action-card'));
+    cards.forEach(c => c.classList.add('locked', 'dimmed'));
+    card.classList.remove('dimmed');
+    card.classList.add('breaking');
+
+    const leftLink = chain.querySelector(`[data-link-index="${data.weakIndex - 1}"]`);
+    const rightLink = chain.querySelector(`[data-link-index="${data.weakIndex}"]`);
+    if (leftLink) leftLink.classList.add('broken');
+    if (rightLink) rightLink.classList.add('broken');
+
+    setTimeout(() => {
+        card.classList.remove('breaking');
+        card.classList.add('weak-found');
+        cards.forEach(c => c.classList.remove('dimmed'));
+        safePlay('success-sound');
+    }, 480);
+
+    setTimeout(() => {
+        successPanel.classList.add('show');
+        progressLine.style.width = `${((currentRound + 1) / gameData.rounds.length) * 100}%`;
+        renderStageRail('round');
+    }, 820);
+}
+
+function nextRound() {
+    if (!roundSolved) return;
+    if (currentRound < gameData.rounds.length - 1) {
+        currentRound++;
+        renderRound();
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    } else {
+        showFinal();
+    }
+}
+
+function showFinal() {
+    updateProgress('final');
+    showScreen(finalScreen);
+    const finalCard = finalScreen.querySelector('.final-card');
+    finalCard.classList.add('celebrate');
+
+    if (!finalCelebrationPlayed) {
+        finalCelebrationPlayed = true;
+        startFinalCelebration();
+    }
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function startFinalCelebration() {
+    const audio = document.getElementById('final-sound');
+    safePlay('final-sound');
+    launchFireworks(26);
+
+    let burstIndex = 0;
+    const interval = setInterval(() => {
+        burstIndex++;
+        const count = burstIndex < 5 ? 20 : 14;
+        launchFireworks(count);
+
+
+        if (audio && audio.ended) {
+            clearInterval(interval);
+        }
+    }, 460);
+
+
+    setTimeout(() => clearInterval(interval), 7600);
+}
+
+function renderReview() {
+    reviewList.innerHTML = '';
+    gameData.rounds.forEach((round, roundIndex) => {
+        const block = document.createElement('div');
+        block.className = 'review-round';
+
+        const title = document.createElement('h3');
+        title.className = 'review-round-title';
+        setTypographedText(title, `${roundIndex + 1}. ${round.title}`);
+        block.appendChild(title);
+
+        const reviewChain = document.createElement('div');
+        reviewChain.className = 'review-chain';
+        reviewChain.style.gridTemplateColumns = `repeat(${round.cards.length}, minmax(0, 1fr))`;
+        round.cards.forEach((text, index) => {
+            const step = document.createElement('div');
+            step.className = 'review-step';
+            if (index === round.weakIndex) step.classList.add('weak');
+            setTypographedText(step, text);
+            reviewChain.appendChild(step);
+        });
+        block.appendChild(reviewChain);
+
+        const explanation = document.createElement('div');
+        explanation.className = 'review-explanation';
+        setTypographedText(explanation, round.explanation);
+        block.appendChild(explanation);
+
+        reviewList.appendChild(block);
+    });
+}
+
+function showReview() {
+    renderReview();
+    setTypographedText(progressBadge, 'Обзор');
+    progressLine.style.width = '100%';
+    renderStageRail('final');
+    showScreen(reviewScreen);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function resetGame() {
+    currentRound = 0;
+    roundSolved = false;
+    finalCelebrationPlayed = false;
+    clearTimeout(hintTimer);
+    const finalCard = finalScreen.querySelector('.final-card');
+    if (finalCard) finalCard.classList.remove('celebrate');
+    updateProgress('start');
+    showScreen(startScreen);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function launchFireworks(count = 20) {
+    for (let i = 0; i < count; i++) {
+        const fw = document.createElement('div');
+        fw.className = 'firework';
+        fw.style.left = Math.random() * window.innerWidth + 'px';
+        fw.style.top = Math.random() * (window.innerHeight * .62) + 'px';
+        fw.style.color = `hsl(${Math.random() * 360}, 100%, 55%)`;
+        document.body.appendChild(fw);
+        setTimeout(() => fw.remove(), 720);
+    }
+}
+
+applyTypography(document.body);
+
+document.getElementById('start-button').addEventListener('click', startGame);
+document.getElementById('reset-button').addEventListener('click', resetGame);
+document.getElementById('next-button').addEventListener('click', nextRound);
+document.getElementById('review-button').addEventListener('click', showReview);
+document.getElementById('restart-button').addEventListener('click', resetGame);
+document.getElementById('restart-button-2').addEventListener('click', resetGame);
+document.getElementById('back-final-button').addEventListener('click', showFinal);
+
+updateProgress('start');
+</script>
+</body>
+</html>

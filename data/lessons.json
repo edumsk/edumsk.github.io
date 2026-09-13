@@ -1,0 +1,42 @@
+{
+    "version": 1,
+    "grade": 5,
+    "lessons": [
+        {
+            "id": "2026-09-14",
+            "date": "2026-09-14",
+            "title": "Первым делом самолёты. История гражданской авиации России",
+            "subtitle": "Разговоры о важном",
+            "adminFolder": "https://drive.google.com/drive/folders/1C23SzED53OLXb8Zyi40aEWumX8B3MvY5",
+            "materials": [
+                {
+                    "id": "presentation",
+                    "type": "presentation",
+                    "title": "Презентация",
+                    "description": "Презентация к уроку",
+                    "source": "google-drive",
+                    "driveId": "16uQGEMXo74_6plk4r0dgL2VY1cT38cI5",
+                    "section": "lesson"
+                },
+                {
+                    "id": "video",
+                    "type": "video",
+                    "title": "Видеоролик",
+                    "description": "Видеоролик-интервью к занятию",
+                    "source": "google-drive",
+                    "driveId": "1-sbTCxdk98V4V_ASgvwepZLOZd8Z3V1R",
+                    "section": "lesson"
+                },
+                {
+                    "id": "game",
+                    "type": "game",
+                    "title": "Интерактивная игра",
+                    "description": "Рождение МС-21: 8 шагов к небу",
+                    "source": "local",
+                    "path": "lessons/2026-09-14/game/",
+                    "section": "lesson"
+                }
+            ]
+        }
+    ]
+}

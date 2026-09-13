@@ -23,8 +23,7 @@
                     "type": "video",
                     "title": "Видеоролик",
                     "description": "Видеоролик-интервью к занятию",
-                    "source": "local",
-                    "path": "lessons/2026-09-14/video-test.mp4",
+                    "source": "google-drive",
                     "driveId": "1-sbTCxdk98V4V_ASgvwepZLOZd8Z3V1R",
                     "section": "lesson"
                 },

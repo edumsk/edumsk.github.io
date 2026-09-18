@@ -1,0 +1,881 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title></title>
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        :root {
+            --bg-card: rgba(255, 251, 240, 0.82);
+            --bg-card-strong: rgba(255, 255, 255, 0.94);
+            --text-main: #2f2417;
+            --text-soft: #6f5a34;
+            --border: rgba(201, 178, 122, 0.45);
+            --shadow: 0 12px 32px rgba(0, 0, 0, 0.10);
+            --green: #63be7b;
+            --green-dark: #4f9e63;
+            --red: #f36d6d;
+            --red-dark: #d95a5a;
+            --accent: #d39b2d;
+        }
+
+        body {
+            margin: 0;
+            padding: 24px;
+            font-family: Arial, sans-serif;
+            color: var(--text-main);
+            background: url('img/fon.jpg') no-repeat center center fixed;
+            background-size: cover;
+            overflow-x: hidden;
+            overflow-y: auto;
+        }
+
+        .page-wrap {
+            max-width: 1440px;
+            margin: 0 auto;
+        }
+
+        .topbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 16px;
+            margin-bottom: 18px;
+            flex-wrap: wrap;
+        }
+
+        .title-block {
+            text-align: left;
+        }
+
+        .page-title {
+            margin: 0;
+            font-size: 44px;
+            font-weight: 900;
+            letter-spacing: -0.02em;
+            color: var(--text-main);
+            text-shadow: 0 2px 0 rgba(255,255,255,0.6);
+        }
+
+
+        .page-subtitle {
+            display: inline-block;
+            margin-top: 8px;
+            padding: 8px 14px;
+            font-size: 18px;
+            line-height: 1.35;
+            color: var(--text-soft);
+            background: rgba(255, 255, 255, 0.68);
+            border-radius: 14px;
+            backdrop-filter: blur(4px);
+        }
+
+        .top-actions {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .progress-badge {
+            min-width: 110px;
+            padding: 10px 16px;
+            border-radius: 999px;
+            background: rgba(255, 251, 240, 0.9);
+            border: 1px solid var(--border);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.06);
+            font-size: 18px;
+            font-weight: 800;
+            color: var(--text-main);
+            text-align: center;
+        }
+
+        .reset-icon {
+            width: 48px;
+            height: 48px;
+            background: rgba(255, 251, 240, 0.92) url('img/reset-icon.svg') no-repeat center center;
+            background-size: 24px;
+            border: 1px solid var(--border);
+            border-radius: 14px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+            cursor: pointer;
+            transition: transform 0.15s ease, box-shadow 0.15s ease, background-color 0.2s ease;
+            flex-shrink: 0;
+        }
+
+        .reset-icon:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 8px 18px rgba(0,0,0,0.12);
+            background-color: rgba(255,255,255,0.98);
+        }
+
+        .layout {
+            display: grid;
+            grid-template-columns: minmax(0, 1fr) minmax(360px, 42%);
+            gap: 22px;
+            align-items: flex-start;
+            transition: grid-template-columns 0.82s cubic-bezier(0.22, 1, 0.36, 1), gap 0.62s ease;
+        }
+
+        .panel {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 28px;
+            box-shadow: var(--shadow);
+            backdrop-filter: blur(6px);
+            padding: 22px;
+            min-width: 0;
+        }
+
+        .left-panel {
+            min-width: 0;
+            transition:
+                transform 0.68s cubic-bezier(0.22, 1, 0.36, 1),
+                width 0.68s cubic-bezier(0.22, 1, 0.36, 1),
+                opacity 0.42s ease;
+        }
+
+        .right-panel {
+            min-width: 0;
+            overflow: hidden;
+            transform-origin: right center;
+            transition:
+                opacity 0.46s ease,
+                transform 0.78s cubic-bezier(0.22, 1, 0.36, 1),
+                filter 0.46s ease,
+                max-width 0.9s cubic-bezier(0.22, 1, 0.36, 1),
+                padding 0.72s ease,
+                border-color 0.34s ease,
+                box-shadow 0.34s ease,
+                margin 0.72s ease;
+        }
+
+        .layout.finishing .right-panel {
+            opacity: 0;
+            filter: blur(3px);
+            transform: translateX(28px) scale(0.975);
+            pointer-events: none;
+        }
+
+        .layout.finish-mode {
+            grid-template-columns: minmax(0, 1fr) 0fr;
+            gap: 0;
+        }
+
+        .layout.finish-mode .left-panel {
+            transform: translateX(0) scale(1.01);
+        }
+
+        .layout.finish-mode .right-panel {
+            max-width: 0;
+            padding-left: 0;
+            padding-right: 0;
+            border-color: transparent;
+            box-shadow: none;
+            margin: 0;
+            pointer-events: none;
+        }
+
+        .progress-line-wrap {
+            width: 100%;
+            height: 8px;
+            margin: 0 0 18px;
+            background: rgba(255, 251, 240, 0.72);
+            border-radius: 999px;
+            overflow: hidden;
+            border: 1px solid rgba(201, 178, 122, 0.28);
+            box-shadow: inset 0 1px 2px rgba(0,0,0,0.04);
+        }
+
+        .progress-line {
+            height: 100%;
+            width: 0%;
+            border-radius: 999px;
+            background: linear-gradient(90deg, #d39b2d 0%, #f0c76a 100%);
+            transition: width 0.28s ease;
+        }
+
+        .bridge-stage {
+            position: relative;
+            border: 2px dashed rgba(211, 155, 45, 0.55);
+            border-radius: 24px;
+            background: rgba(255,255,255,0.76);
+            padding: 18px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 14px;
+            transition:
+                border-color 0.18s ease,
+                background 0.18s ease,
+                box-shadow 0.18s ease,
+                transform 0.68s cubic-bezier(0.22, 1, 0.36, 1),
+                padding 0.68s cubic-bezier(0.22, 1, 0.36, 1);
+        }
+
+        .bridge-stage.drag-over {
+            border-color: #d39b2d;
+            background: rgba(255, 248, 230, 0.95);
+            box-shadow: 0 16px 32px rgba(211, 155, 45, 0.16);
+            transform: translateY(-2px);
+        }
+
+        .bridge-stage.completed {
+            border-color: var(--green-dark);
+            background: rgba(248, 255, 248, 0.95);
+        }
+
+        .bridge-image-wrap {
+            width: min(100%, 640px);
+            aspect-ratio: 1 / 1;
+            overflow: hidden;
+            background: rgba(255,255,255,0.88);
+            border-radius: 18px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto;
+            border: 1px solid rgba(201, 178, 122, 0.28);
+            transition: width 0.68s cubic-bezier(0.22, 1, 0.36, 1);
+        }
+
+        .layout.finish-mode .bridge-image-wrap {
+            width: min(100%, 760px);
+        }
+
+        .bridge-image-wrap img {
+            display: block;
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            object-position: center;
+            user-select: none;
+            -webkit-user-drag: none;
+        }
+
+        .drop-overlay {
+            width: min(100%, 640px);
+            margin: 0 auto;
+            padding: 12px 14px;
+            border-radius: 16px;
+            background: rgba(28, 24, 18, 0.68);
+            color: #fff;
+            font-size: 16px;
+            line-height: 1.35;
+            backdrop-filter: blur(4px);
+            pointer-events: none;
+            text-align: center;
+            transition: width 0.68s cubic-bezier(0.22, 1, 0.36, 1), opacity 0.22s ease;
+        }
+
+        .layout.finish-mode .drop-overlay {
+            width: min(100%, 760px);
+        }
+
+        .drop-overlay.hidden {
+            display: none;
+        }
+
+        .accepted-panel {
+            margin-top: 18px;
+            padding: 18px;
+            border-radius: 22px;
+            background: rgba(255,255,255,0.72);
+            border: 1px solid rgba(201, 178, 122, 0.35);
+        }
+
+        .accepted-title {
+            font-size: 18px;
+            font-weight: 800;
+            margin-bottom: 12px;
+        }
+
+        .accepted-list {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .accepted-empty {
+            color: #8b7751;
+            font-size: 16px;
+            line-height: 1.4;
+        }
+
+        .accepted-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+            padding: 12px 14px;
+            border-radius: 16px;
+            background: linear-gradient(180deg, #9ae09e 0%, var(--green) 100%);
+            color: #fff;
+            box-shadow: 0 8px 18px rgba(79, 158, 99, 0.15);
+            font-size: 16px;
+            line-height: 1.35;
+            font-weight: 700;
+        }
+
+        .accepted-item.with-icon img {
+            width: 22px;
+            height: 22px;
+            flex-shrink: 0;
+            filter: brightness(0) invert(1);
+            margin-top: 1px;
+        }
+        .cards-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            align-self: flex-start;
+            margin: 0 0 18px;
+            padding: 8px 14px;
+            border-radius: 999px;
+            background: rgba(211, 155, 45, 0.12);
+            color: #7a5718;
+            font-size: 16px;
+            font-weight: 800;
+            border: 1px solid rgba(211, 155, 45, 0.22);
+        }
+
+        .cards-grid {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 14px;
+        }
+
+        .draggable {
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+            padding: 14px 15px;
+            border-radius: 18px;
+            background: linear-gradient(180deg, #ffffff 0%, #f8fbff 100%);
+            border: 1.5px solid rgba(140, 179, 231, 0.75);
+            box-shadow:
+                0 6px 16px rgba(0, 0, 0, 0.08),
+                inset 0 1px 0 rgba(255, 255, 255, 0.95);
+            color: #2f3a4a;
+            font-size: 17px;
+            line-height: 1.38;
+            font-weight: 700;
+            cursor: grab;
+            user-select: none;
+            transition: transform 0.18s ease, box-shadow 0.18s ease, border-color 0.18s ease, background 0.18s ease, opacity 0.18s ease;
+        }
+
+        .draggable:hover {
+            transform: translateY(-2px);
+            box-shadow:
+                0 10px 22px rgba(0, 0, 0, 0.12),
+                inset 0 1px 0 rgba(255, 255, 255, 1);
+            border-color: rgba(102, 153, 221, 0.95);
+        }
+
+        .draggable:active {
+            cursor: grabbing;
+            transform: scale(0.99);
+        }
+
+        .draggable.dragging {
+            opacity: 0.72;
+        }
+
+        .draggable.selected {
+            background: linear-gradient(180deg, #fff2c2 0%, #f7d979 100%);
+            border-color: rgba(211, 155, 45, 0.9);
+            box-shadow: 0 10px 22px rgba(211, 155, 45, 0.18);
+        }
+
+        .draggable.correct {
+            pointer-events: none;
+            opacity: 0.35;
+        }
+
+        .draggable.incorrect {
+            background: linear-gradient(180deg, #ffb0b0 0%, var(--red) 100%);
+            border-color: var(--red-dark);
+            color: white;
+            animation: shake 0.28s ease;
+        }
+
+        .draggable.with-icon img {
+            width: 24px;
+            height: 24px;
+            flex-shrink: 0;
+            margin-top: 1px;
+        }
+
+        .firework {
+            position: fixed;
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 9999;
+            animation: firework 700ms ease-out forwards;
+            box-shadow:
+                0 -18px 0 0 currentColor,
+                0 18px 0 0 currentColor,
+                18px 0 0 0 currentColor,
+                -18px 0 0 0 currentColor,
+                13px 13px 0 0 currentColor,
+                -13px -13px 0 0 currentColor,
+                13px -13px 0 0 currentColor,
+                -13px 13px 0 0 currentColor;
+        }
+
+        @keyframes firework {
+            0% {
+                transform: scale(0.2);
+                opacity: 1;
+            }
+            100% {
+                transform: scale(1.8);
+                opacity: 0;
+            }
+        }
+
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-5px); }
+            75% { transform: translateX(5px); }
+        }
+
+        @media (max-width: 1180px) {
+            .layout {
+                grid-template-columns: 1fr;
+            }
+
+            .left-panel,
+            .right-panel {
+                width: 100%;
+                min-width: 0;
+                max-width: none;
+            }
+
+            .bridge-stage {
+                padding: 16px;
+            }
+
+            .bridge-image-wrap,
+            .drop-overlay {
+                width: min(100%, 560px);
+            }
+
+            .layout.finish-mode {
+                grid-template-columns: 1fr;
+            }
+
+            .layout.finish-mode .bridge-image-wrap,
+            .layout.finish-mode .drop-overlay {
+                width: min(100%, 640px);
+            }
+        }
+
+        @media (max-width: 900px) {
+            .cards-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 768px) {
+            body {
+                padding: 16px;
+            }
+
+            .page-title {
+                font-size: 34px;
+            }
+
+            .panel {
+                padding: 16px;
+                border-radius: 22px;
+            }
+
+            .page-subtitle {
+                font-size: 16px;
+            }
+
+            .accepted-empty,
+            .draggable {
+                font-size: 16px;
+            }
+
+            .bridge-stage {
+                padding: 12px;
+                gap: 12px;
+            }
+
+            .bridge-image-wrap,
+            .drop-overlay,
+            .layout.finish-mode .bridge-image-wrap,
+            .layout.finish-mode .drop-overlay {
+                width: 100%;
+            }
+
+            .drop-overlay {
+                font-size: 15px;
+            }
+
+            .accepted-panel {
+                padding: 14px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="page-wrap">
+        <div class="topbar">
+            <div class="title-block">
+                <h1 class="page-title" id="page-title"></h1>
+                <div class="page-subtitle" id="page-subtitle"></div>
+            </div>
+
+            <div class="top-actions">
+                <div class="progress-badge" id="progress-badge">0 / 5</div>
+                <div class="reset-icon" id="reset-button" title="Начать заново"></div>
+            </div>
+        </div>
+
+        <div class="layout" id="layout">
+            <div class="panel left-panel" id="left-panel">
+                <div class="progress-line-wrap">
+                    <div class="progress-line" id="progress-line"></div>
+                </div>
+
+                <div class="bridge-stage" id="bridge-stage" aria-label="Поле для правильных карточек">
+                    <div class="bridge-image-wrap">
+                        <img src="img/0.jpg" id="bridge-image" alt="">
+                    </div>
+                    <div class="drop-overlay" id="drop-overlay"></div>
+                </div>
+
+                <div class="accepted-panel">
+                    <div class="accepted-title" id="accepted-title"></div>
+                    <div class="accepted-list" id="accepted-list">
+                        <div class="accepted-empty" id="accepted-empty"></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="panel right-panel" id="right-panel">
+                <div class="cards-badge" id="cards-badge"></div>
+
+                <div class="cards-grid" id="cards-grid"></div>
+            </div>
+        </div>
+    </div>
+
+    <audio id="success-sound" src="sound/goodAnswer.mp3" preload="auto"></audio>
+    <audio id="matching-touch" src="sound/matching_touch.mp3" preload="auto"></audio>
+    <audio id="fail-sound" src="sound/badAnswer.mp3" preload="auto"></audio>
+    <audio id="final-sound" src="sound/right.mp3" preload="auto"></audio>
+
+    <script>
+        const gameData = {
+            title: 'Цифровые границы',
+            subtitle: 'Выбери, какие личные данные не нужно передавать нейросетям.',
+            cardIcon: '', 
+            cardsBadge: 'Карточки',
+            acceptedTitle: 'Не нужно передавать нейросетям',
+            acceptedEmptyText: 'Пока здесь пусто.',
+            stageHint: 'Перетяни сюда подходящие карточки.',           
+            cards: [
+                { id: 'item1', text: 'пароли от соц.сетей', correct: true },
+                { id: 'item2', text: 'фото документов', correct: true },
+                { id: 'item3', text: 'финансовая информация', correct: true },
+                { id: 'item4', text: 'личные данные', correct: true },
+                { id: 'item5', text: 'чужая личная информация', correct: true },
+                { id: 'item6', text: 'домашний адрес', correct: true },
+                { id: 'item7', text: 'список любимых книг', correct: false },
+                { id: 'item8', text: 'школьное задание / доклад', correct: false },
+                { id: 'item9', text: 'фото кота / питомца ', correct: false },
+                { id: 'item10', text: 'запрос на перевод текста', correct: false },
+                { id: 'item11', text: 'проверка орфографии', correct: false },
+                { id: 'item12', text: 'рекомендация фильма', correct: false }
+            ]
+        };
+
+        const pageTitle = document.getElementById('page-title');
+        const pageSubtitle = document.getElementById('page-subtitle');
+        const layout = document.getElementById('layout');
+        const cardsBadge = document.getElementById('cards-badge');
+        const acceptedTitle = document.getElementById('accepted-title');
+        const cardsGrid = document.getElementById('cards-grid');
+        const bridgeStage = document.getElementById('bridge-stage');
+        const bridgeImage = document.getElementById('bridge-image');
+        const progressBadge = document.getElementById('progress-badge');
+        const progressLine = document.getElementById('progress-line');
+        const acceptedList = document.getElementById('accepted-list');
+        const acceptedEmpty = document.getElementById('accepted-empty');
+        const dropOverlay = document.getElementById('drop-overlay');        const resetButton = document.getElementById('reset-button');
+
+        const totalCorrect = gameData.cards.filter(card => card.correct).length;
+        const hasIcon = Boolean(gameData.cardIcon);
+
+        let placedCorrectIds = [];
+        let selectedCardId = null;
+        let finishCelebrationPlayed = false;
+
+        function applyMeta() {
+            document.title = gameData.title || 'Интерактив';
+            pageTitle.textContent = gameData.title || 'Интерактив';
+            pageSubtitle.textContent = gameData.subtitle || '';
+            pageSubtitle.style.display = gameData.subtitle ? 'inline-block' : 'none';
+            cardsBadge.textContent = gameData.cardsBadge || 'Карточки';
+            acceptedTitle.textContent = gameData.acceptedTitle || '';
+            acceptedEmpty.textContent = gameData.acceptedEmptyText || '';
+            dropOverlay.textContent = gameData.stageHint || '';        }
+
+        function playAudio(id) {
+            const audio = document.getElementById(id);
+            if (!audio) return;
+
+            try {
+                audio.pause();
+                audio.currentTime = 0;
+                const playPromise = audio.play();
+                if (playPromise && typeof playPromise.catch === 'function') {
+                    playPromise.catch(() => {});
+                }
+            } catch (e) {}
+        }
+
+        function shuffle(array) {
+            const copy = [...array];
+            for (let i = copy.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [copy[i], copy[j]] = [copy[j], copy[i]];
+            }
+            return copy;
+        }
+
+        function getCardMarkup(text) {
+            if (!hasIcon) {
+                return `<span>${text}</span>`;
+            }
+            return `\n                <img src="${gameData.cardIcon}" alt="">\n                <span>${text}</span>\n            `;
+        }
+
+        function createCardElement(card) {
+            const element = document.createElement('div');
+            element.className = `draggable${hasIcon ? ' with-icon' : ''}`;
+            element.id = card.id;
+            element.draggable = true;
+            element.dataset.correct = String(card.correct);
+            element.innerHTML = getCardMarkup(card.text);
+
+            element.addEventListener('dragstart', event => {
+                if (placedCorrectIds.includes(card.id) || finishCelebrationPlayed) {
+                    event.preventDefault();
+                    return;
+                }
+                event.dataTransfer.setData('text/plain', card.id);
+                element.classList.add('dragging');
+                selectCard(card.id);
+            });
+
+            element.addEventListener('dragend', () => {
+                element.classList.remove('dragging');
+            });
+
+            element.addEventListener('click', () => {
+                if (placedCorrectIds.includes(card.id) || finishCelebrationPlayed) return;
+                if (selectedCardId === card.id) {
+                    clearSelection();
+                } else {
+                    selectCard(card.id);
+                }
+            });
+
+            return element;
+        }
+
+        function renderCards() {
+            cardsGrid.innerHTML = '';
+            shuffle(gameData.cards).forEach(card => {
+                cardsGrid.appendChild(createCardElement(card));
+            });
+        }
+
+        function selectCard(cardId) {
+            selectedCardId = cardId;
+            document.querySelectorAll('.draggable').forEach(card => {
+                card.classList.toggle('selected', card.id === cardId);
+            });
+        }
+
+        function clearSelection() {
+            selectedCardId = null;
+            document.querySelectorAll('.draggable').forEach(card => {
+                card.classList.remove('selected');
+            });
+        }
+
+        function updateProgress() {
+            const placed = placedCorrectIds.length;
+            progressBadge.textContent = `${placed} / ${totalCorrect}`;
+            progressLine.style.width = `${(placed / totalCorrect) * 100}%`;
+            bridgeImage.src = `img/${placed}.png`;
+            const isDone = placed === totalCorrect;
+            dropOverlay.textContent = gameData.stageHint || '';
+            dropOverlay.classList.toggle('hidden', isDone || !(gameData.stageHint || '').trim());
+            bridgeStage.classList.toggle('completed', isDone);
+        }
+
+        function updateAcceptedList() {
+            acceptedList.innerHTML = '';
+
+            if (placedCorrectIds.length === 0) {
+                acceptedList.appendChild(acceptedEmpty);
+                acceptedEmpty.style.display = 'block';
+                return;
+            }
+
+            acceptedEmpty.style.display = 'none';
+
+            placedCorrectIds.forEach(id => {
+                const card = gameData.cards.find(item => item.id === id);
+                if (!card) return;
+
+                const item = document.createElement('div');
+                item.className = `accepted-item${hasIcon ? ' with-icon' : ''}`;
+                item.innerHTML = getCardMarkup(card.text);
+                acceptedList.appendChild(item);
+            });
+        }
+
+        function markCardIncorrect(cardElement) {
+            if (!cardElement) return;
+            cardElement.classList.remove('selected');
+            cardElement.classList.add('incorrect');
+            playAudio('fail-sound');
+            setTimeout(() => cardElement.classList.remove('incorrect'), 450);
+        }
+
+        function placeCard(cardId) {
+            if (finishCelebrationPlayed) return;
+
+            const cardData = gameData.cards.find(card => card.id === cardId);
+            const cardElement = document.getElementById(cardId);
+            if (!cardData || !cardElement || placedCorrectIds.includes(cardId)) return;
+
+            if (!cardData.correct) {
+                markCardIncorrect(cardElement);
+                clearSelection();
+                return;
+            }
+
+            placedCorrectIds.push(cardId);
+            cardElement.classList.remove('selected', 'incorrect', 'dragging');
+            cardElement.classList.add('correct');
+            cardElement.style.display = 'none';
+
+            playAudio('success-sound');
+            launchLocalFireworks();
+
+            clearSelection();
+            updateProgress();
+            updateAcceptedList();
+            checkCompletion();
+        }
+
+        function activateFinishLayout() {
+            layout.classList.add('finishing');
+            setTimeout(() => {
+                layout.classList.add('finish-mode');
+            }, 260);
+        }
+
+
+        function checkCompletion() {
+            if (placedCorrectIds.length !== totalCorrect || finishCelebrationPlayed) return;
+
+            finishCelebrationPlayed = true;            setTimeout(() => {
+                playAudio('final-sound');
+            }, 120);
+
+            launchFireworks(16);
+            const fireworkInterval = setInterval(() => launchFireworks(18), 500);
+            setTimeout(() => clearInterval(fireworkInterval), 3000);
+
+            setTimeout(() => {
+                activateFinishLayout();
+            }, 950);
+        }
+
+        function launchFireworks(count = 18) {
+            for (let i = 0; i < count; i++) {
+                const firework = document.createElement('div');
+                firework.className = 'firework';
+                firework.style.left = Math.random() * window.innerWidth + 'px';
+                firework.style.top = Math.random() * (window.innerHeight * 0.6) + 'px';
+                firework.style.color = `hsl(${Math.random() * 360}, 100%, 55%)`;
+                document.body.appendChild(firework);
+                setTimeout(() => firework.remove(), 700);
+            }
+        }
+
+        function launchLocalFireworks() {
+            const rect = bridgeStage.getBoundingClientRect();
+            const centerX = rect.left + rect.width / 2;
+            const centerY = rect.top + rect.height / 2;
+
+            for (let i = 0; i < 8; i++) {
+                const firework = document.createElement('div');
+                firework.className = 'firework';
+                firework.style.left = centerX + (Math.random() * 180 - 90) + 'px';
+                firework.style.top = centerY + (Math.random() * 120 - 60) + 'px';
+                firework.style.color = `hsl(${Math.random() * 360}, 100%, 55%)`;
+                document.body.appendChild(firework);
+                setTimeout(() => firework.remove(), 700);
+            }
+        }
+
+        function resetGame() {
+            placedCorrectIds = [];
+            selectedCardId = null;
+            finishCelebrationPlayed = false;            layout.classList.remove('finishing', 'finish-mode');
+            bridgeImage.src = 'img/0.jpg';
+            renderCards();
+            updateProgress();
+            updateAcceptedList();
+            clearSelection();
+        }
+
+        bridgeStage.addEventListener('dragover', event => {
+            event.preventDefault();
+            if (!finishCelebrationPlayed) {
+                bridgeStage.classList.add('drag-over');
+            }
+        });
+
+        bridgeStage.addEventListener('dragleave', () => {
+            bridgeStage.classList.remove('drag-over');
+        });
+
+        bridgeStage.addEventListener('drop', event => {
+            event.preventDefault();
+            bridgeStage.classList.remove('drag-over');
+            const cardId = event.dataTransfer.getData('text/plain');
+            if (cardId) {
+                placeCard(cardId);
+            }
+        });
+
+        bridgeStage.addEventListener('click', () => {
+            if (!selectedCardId) return;
+            placeCard(selectedCardId);
+        });
+
+        resetButton.addEventListener('click', resetGame);
+
+        applyMeta();
+        resetGame();
+    </script>
+</body>
+</html>

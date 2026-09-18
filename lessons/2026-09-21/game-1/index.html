@@ -1,0 +1,1125 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Кто умеет это делать?</title>
+    <style>
+        * { box-sizing: border-box; }
+
+        :root {
+            --bg-card: rgba(255, 251, 240, 0.88);
+            --bg-card-strong: rgba(255, 255, 255, 0.94);
+            --text-main: #2f2417;
+            --text-soft: #6f5a34;
+            --accent: #d39b2d;
+            --accent-soft: rgba(211, 155, 45, 0.16);
+            --border: rgba(201, 178, 122, 0.45);
+            --shadow: 0 12px 32px rgba(0, 0, 0, 0.10);
+            --green: #63be7b;
+            --green-dark: #4f9e63;
+            --red: #f36d6d;
+            --red-dark: #d95a5a;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            color: var(--text-main);
+            background: url('img/fon.jpg') no-repeat center center fixed;
+            background-size: cover;
+            margin: 0;
+            padding: 24px;
+            overflow-x: hidden;
+            overflow-y: auto;
+        }
+
+        .page-wrap {
+            max-width: 1440px;
+            margin: 0 auto;
+        }
+
+        .topbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 16px;
+            margin-bottom: 18px;
+            flex-wrap: wrap;
+        }
+
+        .title-block { text-align: left; }
+
+        .page-title {
+            margin: 0;
+            font-size: 44px;
+            font-weight: 900;
+            letter-spacing: -0.02em;
+            color: var(--text-main);
+            text-shadow: 0 2px 0 rgba(255,255,255,0.6);
+        }
+
+        .page-subtitle {
+            display: inline-block;
+            margin-top: 8px;
+            padding: 8px 14px;
+            font-size: 18px;
+            line-height: 1.35;
+            color: var(--text-soft);
+            background: rgba(255, 255, 255, 0.68);
+            border-radius: 14px;
+            backdrop-filter: blur(4px);
+        }
+
+        .top-actions {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .progress-badge {
+            min-width: 110px;
+            padding: 10px 16px;
+            border-radius: 999px;
+            background: rgba(255, 251, 240, 0.9);
+            border: 1px solid var(--border);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.06);
+            font-size: 18px;
+            font-weight: 700;
+            color: var(--text-main);
+            text-align: center;
+        }
+
+        .reset-icon {
+            width: 48px;
+            height: 48px;
+            background: rgba(255, 251, 240, 0.92) url('img/reset-icon.svg') no-repeat center center;
+            background-size: 24px;
+            border: 1px solid var(--border);
+            border-radius: 14px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+            cursor: pointer;
+            transition: transform 0.15s ease, box-shadow 0.15s ease, background-color 0.2s ease;
+            flex-shrink: 0;
+        }
+
+        .reset-icon:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 8px 18px rgba(0,0,0,0.12);
+            background-color: rgba(255,255,255,0.98);
+        }
+
+        .progress-line-wrap {
+            width: 100%;
+            height: 8px;
+            margin: 0 0 18px;
+            background: rgba(255, 251, 240, 0.72);
+            border-radius: 999px;
+            overflow: hidden;
+            border: 1px solid rgba(201, 178, 122, 0.28);
+            box-shadow: inset 0 1px 2px rgba(0,0,0,0.04);
+        }
+
+        .progress-line {
+            height: 100%;
+            width: 0%;
+            border-radius: 999px;
+            background: linear-gradient(90deg, #d39b2d 0%, #f0c76a 100%);
+            transition: width 0.28s ease;
+        }
+
+        .zones-wrap {
+            display: grid;
+            gap: 18px;
+            width: 100%;
+            margin: 0 0 18px;
+        }
+
+        .dropzone {
+            min-height: 220px;
+            border: 2px dashed rgba(211, 155, 45, 0.55);
+            border-radius: 22px;
+            display: flex;
+            flex-direction: column;
+            align-items: stretch;
+            justify-content: flex-start;
+            padding: 12px;
+            background: var(--bg-card);
+            box-shadow: var(--shadow);
+            backdrop-filter: blur(6px);
+            overflow: hidden;
+            position: relative;
+            min-width: 0;
+            transition: background 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease, transform 0.15s ease;
+            gap: 10px;
+        }
+
+        .dropzone.drag-over,
+        .dropzone.click-target {
+            border-color: #d39b2d;
+            background: rgba(255, 248, 230, 0.95);
+            box-shadow: 0 14px 32px rgba(211, 155, 45, 0.14);
+            transform: translateY(-2px);
+        }
+
+        .dropzone.completed {
+            border-color: var(--green-dark);
+            background: rgba(248, 255, 248, 0.95);
+        }
+
+        .zone-head {
+            display: flex;
+            align-items: flex-start;
+            justify-content: space-between;
+            gap: 10px;
+            min-height: 24px;
+        }
+
+        .dropzone-top-text {
+            flex: 1;
+            font-size: 22px;
+            line-height: 1.2;
+            font-weight: 900;
+            color: var(--text-main);
+            text-align: center;
+            padding-left: 34px;
+        }
+
+        .zone-count {
+            min-width: 42px;
+            padding: 6px 10px;
+            border-radius: 999px;
+            background: rgba(255,255,255,0.88);
+            border: 1px solid rgba(201, 178, 122, 0.45);
+            color: var(--text-main);
+            font-size: 13px;
+            font-weight: 800;
+            text-align: center;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+            flex-shrink: 0;
+        }
+
+        .dropzone.completed .zone-count {
+            background: linear-gradient(180deg, #9ae09e 0%, var(--green) 100%);
+            border-color: var(--green-dark);
+            color: #fff;
+        }
+
+        .static-image-wrap {
+            position: relative;
+            width: 100%;
+        }
+
+        .dropzone-image {
+            width: 100%;
+            aspect-ratio: 1.9 / 1;
+            max-height: 148px;
+            border-radius: 14px;
+            overflow: hidden;
+            background: rgba(255,255,255,0.78);
+            border: 1px solid rgba(201, 178, 122, 0.3);
+        }
+
+        .dropzone-image img {
+            display: block;
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            object-position: center;
+        }
+
+        .zoom-button {
+            position: absolute;
+            top: 6px;
+            right: 6px;
+            width: 34px;
+            height: 34px;
+            z-index: 3;
+            border: 1px solid rgba(255,255,255,0.28);
+            border-radius: 10px;
+            background-color: rgba(47, 36, 23, 0.88);
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 -960 960 960'%3E%3Cpath fill='white' d='M784-120 532-372q-30 24-69 38t-83 14q-109 0-184.5-75.5T120-580q0-109 75.5-184.5T380-840q109 0 184.5 75.5T640-580q0 44-14 83t-38 69l252 252-56 56ZM380-400q75 0 127.5-52.5T560-580q0-75-52.5-127.5T380-760q-75 0-127.5 52.5T200-580q0 75 52.5 127.5T380-400Z'/%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: center;
+            background-size: 18px 18px;
+            color: transparent;
+            font-size: 0;
+            cursor: pointer;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.16);
+            transition: transform 0.15s ease, background-color 0.15s ease, box-shadow 0.15s ease;
+        }
+
+        .zoom-button:hover {
+            background-color: rgba(47, 36, 23, 0.96);
+            transform: translateY(-1px);
+            box-shadow: 0 9px 18px rgba(0,0,0,0.2);
+        }
+
+        .dropzone-bottom-text {
+            font-size: 15px;
+            line-height: 1.3;
+            color: var(--text-soft);
+            text-align: center;
+        }
+
+        .dropzone-bottom-text:empty {
+            display: none;
+        }
+
+        .dropzone-answers {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 8px;
+            margin-top: 0;
+            min-height: 112px;
+            align-items: flex-start;
+            padding: 10px;
+            border-radius: 16px;
+            background: rgba(255,255,255,0.62);
+            border: 2px dashed rgba(201, 201, 201, 0.9);
+        }
+
+        .dropzone.empty .dropzone-answers::before {
+            content: attr(data-placeholder);
+            align-self: center;
+            color: #777;
+            font-size: 15px;
+            line-height: 1.35;
+            text-align: center;
+            max-width: 220px;
+            width: 100%;
+        }
+
+        .dropzone:not(.empty) .dropzone-answers {
+            border-style: solid;
+            border-color: var(--green-dark);
+            background: rgba(243, 255, 243, 0.95);
+        }
+
+        .cards-panel {
+            width: 100%;
+            padding: 18px;
+            background: rgba(255, 251, 240, 0.82);
+            border: 1px solid var(--border);
+            border-radius: 24px;
+            box-shadow: 0 10px 28px rgba(0,0,0,0.08);
+            backdrop-filter: blur(4px);
+            transition: opacity 0.45s ease, transform 0.45s ease, max-height 0.55s ease, padding 0.45s ease, margin 0.45s ease;
+            overflow: hidden;
+            max-height: 1200px;
+        }
+
+        .page-wrap.finish-mode .cards-panel {
+            opacity: 0;
+            transform: translateY(16px);
+            pointer-events: none;
+            max-height: 0;
+            padding-top: 0;
+            padding-bottom: 0;
+            margin-top: 0;
+            border-color: transparent;
+            box-shadow: none;
+        }
+
+        .cards-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            margin: 0 0 14px;
+            padding: 8px 14px;
+            border-radius: 999px;
+            background: var(--accent-soft);
+            color: #7a5718;
+            font-size: 16px;
+            font-weight: 800;
+            border: 1px solid rgba(211, 155, 45, 0.22);
+        }
+
+        .cards-grid {
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+
+        .draggable {
+            width: 280px;
+            border: 1px solid rgba(201, 178, 122, 0.55);
+            border-radius: 16px;
+            padding: 12px 14px;
+            text-align: left;
+            background: rgba(255,255,255,0.96);
+            font-weight: 700;
+            line-height: 1.3;
+            color: var(--text-main);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.07);
+            transition: transform 0.15s ease, box-shadow 0.15s ease, border-color 0.2s ease, background 0.2s ease, opacity 0.2s ease;
+            position: relative;
+            user-select: none;
+            cursor: grab;
+            outline: none;
+        }
+
+        .draggable:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 22px rgba(0, 0, 0, 0.12);
+        }
+
+        .draggable.dragging {
+            opacity: 0.75;
+            transform: scale(0.98);
+            box-shadow: 0 10px 24px rgba(0,0,0,0.16);
+        }
+
+        .draggable.selected {
+            background: linear-gradient(180deg, #fff2c2 0%, #f7d979 100%);
+            border-color: rgba(211, 155, 45, 0.9);
+            box-shadow: 0 10px 22px rgba(211, 155, 45, 0.18);
+        }
+
+        .draggable.correct {
+            background: linear-gradient(180deg, #9ae09e 0%, var(--green) 100%);
+            border-color: var(--green-dark);
+            color: white;
+        }
+
+        .draggable.incorrect {
+            background: linear-gradient(180deg, #ffaaaa 0%, var(--red) 100%);
+            border-color: var(--red-dark);
+            color: white;
+            animation: shake 0.28s ease;
+        }
+
+        .draggable.hidden {
+            display: none;
+        }
+
+        .draggable p {
+            margin: 0;
+            font-size: 14px;
+            line-height: 1.3;
+        }
+
+        .dropzone .draggable {
+            width: 100%;
+            max-width: none;
+            cursor: default;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.06);
+        }
+
+        .dropzone .draggable:hover {
+            transform: none;
+        }
+
+        .done-note {
+            display: none;
+            margin-top: 6px;
+            padding: 12px 14px;
+            border-radius: 16px;
+            background: linear-gradient(180deg, #f7e49b 0%, #e7c55e 100%);
+            color: #4f3d15;
+            font-size: 16px;
+            line-height: 1.35;
+            font-weight: 900;
+            text-align: center;
+            box-shadow: 0 10px 22px rgba(211, 155, 45, 0.16);
+        }
+
+        .page-wrap.finish-mode .done-note {
+            display: block;
+        }
+
+        .popup,
+        .image-modal {
+            position: fixed;
+            inset: 0;
+            background: rgba(21, 17, 13, 0.48);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            padding: 24px;
+            z-index: 1000;
+        }
+
+        .popup.show,
+        .image-modal.show {
+            display: flex;
+        }
+
+        .popup-content,
+        .image-modal-content {
+            width: min(760px, 100%);
+            background: var(--bg-card-strong);
+            border-radius: 28px;
+            padding: 30px 30px 24px;
+            text-align: left;
+            box-shadow: 0 24px 54px rgba(0, 0, 0, 0.22);
+            border: 1px solid rgba(255,255,255,0.72);
+            animation: popupIn 0.2s ease-out;
+        }
+
+        .image-modal-content {
+            width: min(1000px, 100%);
+            padding: 18px;
+        }
+
+        @keyframes popupIn {
+            from {
+                opacity: 0;
+                transform: translateY(8px) scale(0.98);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+        }
+
+        .popup-header {
+            font-size: 30px;
+            font-weight: 800;
+            margin-bottom: 16px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            color: var(--green-dark);
+        }
+
+        .popup-body {
+            font-size: 20px;
+            color: #55432a;
+            line-height: 1.6;
+        }
+
+        .popup-close,
+        .image-modal-close {
+            margin: 24px 0 0 auto;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 54px;
+            padding: 12px 22px;
+            background: #2f2417;
+            color: white;
+            border-radius: 14px;
+            font-size: 18px;
+            font-weight: 700;
+            border: none;
+            cursor: pointer;
+            box-shadow: 0 8px 16px rgba(0,0,0,0.12);
+        }
+
+        .image-modal-close {
+            margin-top: 18px;
+        }
+
+        .image-modal-picture {
+            width: 100%;
+            border-radius: 18px;
+            overflow: hidden;
+            background: rgba(255,255,255,0.75);
+        }
+
+        .image-modal-picture img {
+            display: block;
+            width: 100%;
+            height: auto;
+            max-height: 78vh;
+            object-fit: contain;
+            margin: 0 auto;
+        }
+
+        .image-modal-caption {
+            margin-top: 12px;
+            font-size: 17px;
+            line-height: 1.45;
+            color: var(--text-main);
+            text-align: center;
+        }
+
+        .firework {
+            position: fixed;
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 9999;
+            animation: firework 700ms ease-out forwards;
+            box-shadow:
+                0 -18px 0 0 currentColor,
+                0 18px 0 0 currentColor,
+                18px 0 0 0 currentColor,
+                -18px 0 0 0 currentColor,
+                13px 13px 0 0 currentColor,
+                -13px -13px 0 0 currentColor,
+                13px -13px 0 0 currentColor,
+                -13px 13px 0 0 currentColor;
+        }
+
+        @keyframes firework {
+            0% { transform: scale(0.2); opacity: 1; }
+            100% { transform: scale(1.8); opacity: 0; }
+        }
+
+        @keyframes shake {
+            0%,100% { transform: translateX(0); }
+            25% { transform: translateX(-5px); }
+            75% { transform: translateX(5px); }
+        }
+
+        @media (max-width: 1280px) {
+            .draggable { width: 240px; }
+        }
+
+        @media (max-width: 980px) {
+            .zones-wrap { grid-template-columns: 1fr !important; }
+            .dropzone-top-text { padding-left: 0; }
+            .draggable { width: 100%; }
+        }
+
+        @media (max-width: 768px) {
+            body { padding: 16px; }
+            .page-title { font-size: 34px; }
+            .page-subtitle { font-size: 16px; }
+            .cards-panel { padding: 16px; }
+            .dropzone { min-height: 0; }
+            .dropzone-top-text { font-size: 18px; }
+            .dropzone-image { max-height: 180px; aspect-ratio: 1.5 / 1; }
+            .popup-content,
+            .image-modal-content {
+                padding: 22px 18px 18px;
+                border-radius: 20px;
+            }
+            .popup-body { font-size: 18px; line-height: 1.55; }
+            .popup-close,
+            .image-modal-close { width: 100%; }
+        }
+    </style>
+</head>
+<body>
+    <div class="page-wrap" id="page-wrap">
+        <div class="topbar">
+            <div class="title-block">
+                <h1 class="page-title" id="page-title"></h1>
+                <div class="page-subtitle" id="page-subtitle"></div>
+            </div>
+
+            <div class="top-actions">
+                <div class="progress-badge" id="progress-badge">0 / 0</div>
+                <div class="reset-icon" id="reset-button" title="Начать заново"></div>
+            </div>
+        </div>
+
+        <div class="progress-line-wrap">
+            <div class="progress-line" id="progress-line"></div>
+        </div>
+
+        <div class="zones-wrap" id="zones-wrap"></div>
+        <div class="done-note" id="done-note"></div>
+
+        <div class="cards-panel" id="cards-panel">
+            <div class="cards-badge" id="cards-badge"></div>
+            <div class="cards-grid" id="cards-grid"></div>
+        </div>
+    </div>
+
+    <div class="popup" id="popup">
+        <div class="popup-content">
+            <div class="popup-header" id="popup-header">✔️ Верно!</div>
+            <div class="popup-body" id="popup-body"></div>
+            <button class="popup-close" type="button" onclick="closePopup()">Закрыть</button>
+        </div>
+    </div>
+
+    <div class="image-modal" id="image-modal">
+        <div class="image-modal-content">
+            <div class="image-modal-picture">
+                <img id="image-modal-img" src="" alt="">
+            </div>
+            <div class="image-modal-caption" id="image-modal-caption"></div>
+            <button class="image-modal-close" type="button" onclick="closeImageModal()">Закрыть</button>
+        </div>
+    </div>
+
+    <audio id="success-sound" src="sound/right.mp3" preload="auto"></audio>
+    <audio id="matching-touch" src="sound/matching_touch.mp3" preload="auto"></audio>
+    <audio id="fail-sound" src="sound/badAnswer.mp3" preload="auto"></audio>
+
+   <script>
+    const gameData = {
+        title: "Кто умеет это делать?",
+        subtitle: "Соотнеси правильно.",
+        cardsBadge: "Карточки",
+        zonePlaceholder: "Перетяни сюда подходящие карточки",
+        finishText: "Все карточки распределены по своим местам.",
+        zoneColumns: 2,
+        zones: [
+            {
+                id: "1",
+                topText: "Что умеет искусственный интеллект",
+                image: "img/1.png",
+                imageAlt: "Искусственный интеллект",
+                bottomText: ""
+            },
+            {
+                id: "2",
+                topText: "Что умеет человек (естественный интеллект)",
+                image: "img/2.jpg",
+                imageAlt: "Человек — естественный интеллект",
+                bottomText: ""
+            }
+        ],
+        items: [
+            { id: "1", text: "Быстро считать и искать", category: "1", explanation: "" },
+            { id: "2", text: "Запоминать тонны фактов", category: "1", explanation: "" },
+            { id: "3", text: "Подбирать похожее", category: "1", explanation: "" },
+            { id: "4", text: "Выполнять команды", category: "1", explanation: "" },
+            { id: "5", text: "Анализировать цифры", category: "1", explanation: "" },
+            { id: "6", text: "Думать и сомневаться", category: "2", explanation: "" },
+            { id: "7", text: "Забывать лишнее и оставлять главное", category: "2", explanation: "" },
+            { id: "8", text: "Творить новое и необычное", category: "2", explanation: "" },
+            { id: "9", text: "Мечтать и ставить цели", category: "2", explanation: "" },
+            { id: "10", text: "Чувствовать настроение и эмоции другого", category: "2", explanation: "" }
+        ]
+    };
+
+    const pageWrap = document.getElementById("page-wrap");
+    const pageTitle = document.getElementById("page-title");
+    const pageSubtitle = document.getElementById("page-subtitle");
+    const cardsBadge = document.getElementById("cards-badge");
+    const progressBadge = document.getElementById("progress-badge");
+    const progressLine = document.getElementById("progress-line");
+    const zonesWrap = document.getElementById("zones-wrap");
+    const cardsGrid = document.getElementById("cards-grid");
+    const resetButton = document.getElementById("reset-button");
+    const doneNote = document.getElementById("done-note");
+
+    const popup = document.getElementById("popup");
+    const popupHeader = document.getElementById("popup-header");
+    const popupBody = document.getElementById("popup-body");
+
+    const imageModal = document.getElementById("image-modal");
+    const imageModalImg = document.getElementById("image-modal-img");
+    const imageModalCaption = document.getElementById("image-modal-caption");
+
+    let finishCelebrationPlayed = false;
+    let selectedCardId = null;
+
+    function playAudio(audioId) {
+        const audio = document.getElementById(audioId);
+        if (!audio) return;
+
+        try {
+            audio.pause();
+            audio.currentTime = 0;
+            const playPromise = audio.play();
+            if (playPromise && typeof playPromise.catch === "function") {
+                playPromise.catch(() => {});
+            }
+        } catch (err) {}
+    }
+
+    function shuffle(arr) {
+        const copy = [...arr];
+        for (let i = copy.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [copy[i], copy[j]] = [copy[j], copy[i]];
+        }
+        return copy;
+    }
+
+    function applyMeta() {
+        document.title = gameData.title || "Сортировка";
+        pageTitle.textContent = gameData.title || "Сортировка";
+        pageSubtitle.textContent = gameData.subtitle || "";
+        pageSubtitle.style.display = gameData.subtitle ? "inline-block" : "none";
+        cardsBadge.textContent = gameData.cardsBadge || "Карточки";
+        doneNote.textContent = gameData.finishText || "Все карточки распределены по своим местам.";
+    }
+
+    function getZoneLabel(zoneData) {
+        return zoneData.topText || zoneData.title || "";
+    }
+
+    function getZoneItems(zoneId) {
+        return gameData.items.filter(item => String(item.category) === String(zoneId));
+    }
+
+    function getPlacedCountForZone(zoneId) {
+        return getZoneItems(zoneId).filter(item => item._placed).length;
+    }
+
+    function updateZoneLayout() {
+        if (window.innerWidth <= 768) {
+            zonesWrap.style.gridTemplateColumns = "1fr";
+            return;
+        }
+
+        if (window.innerWidth <= 980) {
+            zonesWrap.style.gridTemplateColumns = "repeat(2, minmax(0, 1fr))";
+            return;
+        }
+
+        if (window.innerWidth <= 1280) {
+            const tabletCols = Math.min(gameData.zoneColumns || 3, 3);
+            zonesWrap.style.gridTemplateColumns = `repeat(${tabletCols}, minmax(0, 1fr))`;
+            return;
+        }
+
+        if (gameData.zoneColumns) {
+            zonesWrap.style.gridTemplateColumns = `repeat(${gameData.zoneColumns}, minmax(0, 1fr))`;
+            return;
+        }
+
+        const count = gameData.zones.length;
+        zonesWrap.style.gridTemplateColumns = `repeat(${Math.min(count, 3)}, minmax(0, 1fr))`;
+    }
+
+    function updateZoneCounter(zone) {
+        const zoneId = zone.dataset.category;
+        const placed = getPlacedCountForZone(zoneId);
+        const total = getZoneItems(zoneId).length;
+        const counter = zone.querySelector(".zone-count");
+        if (counter) counter.textContent = `${placed}/${total}`;
+        zone.classList.toggle("completed", placed === total && total > 0);
+    }
+
+    function refreshZoneClickState() {
+        document.querySelectorAll(".dropzone").forEach(zone => {
+            zone.classList.toggle("click-target", Boolean(selectedCardId) && !zone.classList.contains("completed"));
+        });
+    }
+
+    function selectCard(card) {
+        if (!card || card.classList.contains("hidden")) return;
+        clearSelectedCard();
+        selectedCardId = card.id;
+        card.classList.add("selected");
+        refreshZoneClickState();
+    }
+
+    function clearSelectedCard() {
+        if (selectedCardId) {
+            const prev = document.getElementById(selectedCardId);
+            if (prev) prev.classList.remove("selected");
+        }
+        selectedCardId = null;
+        refreshZoneClickState();
+    }
+
+    function toggleCardSelection(card) {
+        if (selectedCardId === card.id) {
+            clearSelectedCard();
+            return;
+        }
+        selectCard(card);
+    }
+
+    function updateProgress() {
+        const placed = gameData.items.filter(item => item._placed).length;
+        progressBadge.textContent = `${placed} / ${gameData.items.length}`;
+        progressLine.style.width = `${(placed / gameData.items.length) * 100}%`;
+    }
+
+    function showPopup(text, title = "✔️ Верно!") {
+        popupHeader.textContent = title;
+        popupBody.textContent = text;
+        popup.classList.add("show");
+    }
+
+    function closePopup() {
+        popup.classList.remove("show");
+    }
+
+    function openImageModal(src, caption = "") {
+        if (!src) return;
+        imageModalImg.src = src;
+        imageModalCaption.textContent = caption || "";
+        imageModal.classList.add("show");
+    }
+
+    function closeImageModal() {
+        imageModal.classList.remove("show");
+        imageModalImg.removeAttribute("src");
+        imageModalCaption.textContent = "";
+    }
+
+    function createZone(zoneData) {
+        const zone = document.createElement("div");
+        zone.className = "dropzone empty";
+        zone.dataset.category = zoneData.id;
+        zone.tabIndex = 0;
+
+        const totalForZone = getZoneItems(zoneData.id).length;
+
+        const imageMarkup = zoneData.image
+            ? `
+                <div class="static-image-wrap">
+                    <div class="dropzone-image">
+                        <img src="${zoneData.image}" alt="${zoneData.imageAlt || getZoneLabel(zoneData)}">
+                    </div>
+                    <button class="zoom-button" type="button" aria-label="Увеличить изображение"></button>
+                </div>
+            `
+            : "";
+
+        zone.innerHTML = `
+            <div class="zone-head">
+                <div class="dropzone-top-text">${getZoneLabel(zoneData)}</div>
+                <div class="zone-count">0/${totalForZone}</div>
+            </div>
+            ${imageMarkup}
+            <div class="dropzone-bottom-text">${zoneData.bottomText || ""}</div>
+            <div class="dropzone-answers" data-placeholder="${gameData.zonePlaceholder || ""}"></div>
+        `;
+
+        const zoomButton = zone.querySelector(".zoom-button");
+        if (zoomButton && zoneData.image) {
+            zoomButton.addEventListener("click", event => {
+                event.stopPropagation();
+                openImageModal(zoneData.image, getZoneLabel(zoneData));
+            });
+        }
+
+        addDropzoneEvents(zone);
+        return zone;
+    }
+
+    function renderZones() {
+        zonesWrap.innerHTML = "";
+        gameData.zones.forEach(zoneData => {
+            const zone = createZone(zoneData);
+            zonesWrap.appendChild(zone);
+            updateZoneCounter(zone);
+        });
+        updateZoneLayout();
+    }
+
+    function createCard(item) {
+        const card = document.createElement("div");
+        card.className = "draggable";
+        card.id = `item-${item.id}`;
+        card.dataset.id = item.id;
+        card.dataset.category = item.category;
+        card.draggable = true;
+        card.tabIndex = 0;
+        card.innerHTML = `<p>${item.text}</p>`;
+
+        card.addEventListener("dragstart", event => {
+            if (card.classList.contains("hidden") || finishCelebrationPlayed) {
+                event.preventDefault();
+                return;
+            }
+            event.dataTransfer.setData("text/plain", card.id);
+            card.classList.add("dragging");
+            selectCard(card);
+        });
+
+        card.addEventListener("dragend", () => {
+            card.classList.remove("dragging");
+        });
+
+        card.addEventListener("click", () => {
+            if (card.classList.contains("hidden") || finishCelebrationPlayed) return;
+            toggleCardSelection(card);
+        });
+
+        card.addEventListener("keydown", event => {
+            if (event.key === "Enter" || event.key === " ") {
+                event.preventDefault();
+                if (card.classList.contains("hidden") || finishCelebrationPlayed) return;
+                toggleCardSelection(card);
+            }
+        });
+
+        return card;
+    }
+
+    function renderCards() {
+        cardsGrid.innerHTML = "";
+        shuffle(gameData.items).forEach(item => {
+            cardsGrid.appendChild(createCard(item));
+        });
+    }
+
+    function updateZoneEmptyState(zone) {
+        if (!zone) return;
+        const answers = zone.querySelector(".dropzone-answers");
+        const hasCards = answers && answers.querySelector(".draggable");
+        zone.classList.toggle("empty", !hasCards);
+        updateZoneCounter(zone);
+    }
+
+    function addDropzoneEvents(dropzone) {
+        dropzone.addEventListener("dragover", event => {
+            event.preventDefault();
+            if (!dropzone.classList.contains("completed")) {
+                dropzone.classList.add("drag-over");
+            }
+        });
+
+        dropzone.addEventListener("dragleave", () => {
+            dropzone.classList.remove("drag-over");
+        });
+
+        dropzone.addEventListener("drop", event => {
+            event.preventDefault();
+            dropzone.classList.remove("drag-over");
+            const cardId = event.dataTransfer.getData("text/plain");
+            const draggedCard = document.getElementById(cardId);
+            if (!draggedCard || dropzone.classList.contains("completed")) return;
+            attemptPlacement(draggedCard, dropzone);
+        });
+
+        dropzone.addEventListener("click", () => {
+            if (!selectedCardId || dropzone.classList.contains("completed")) return;
+            const selectedCard = document.getElementById(selectedCardId);
+            if (!selectedCard || selectedCard.classList.contains("hidden")) return;
+            attemptPlacement(selectedCard, dropzone);
+        });
+
+        dropzone.addEventListener("keydown", event => {
+            if ((event.key === "Enter" || event.key === " ") && !dropzone.classList.contains("completed") && selectedCardId) {
+                event.preventDefault();
+                const selectedCard = document.getElementById(selectedCardId);
+                if (selectedCard && !selectedCard.classList.contains("hidden")) {
+                    attemptPlacement(selectedCard, dropzone);
+                }
+            }
+        });
+    }
+
+    function moveCardToRandomPosition(card) {
+        if (!card || !cardsGrid.contains(card)) return;
+
+        const cards = Array.from(cardsGrid.querySelectorAll(".draggable"));
+        const otherCards = cards.filter(item => item !== card);
+
+        if (!otherCards.length) return;
+
+        const randomIndex = Math.floor(Math.random() * (otherCards.length + 1));
+
+        if (randomIndex >= otherCards.length) {
+            cardsGrid.appendChild(card);
+        } else {
+            cardsGrid.insertBefore(card, otherCards[randomIndex]);
+        }
+    }
+
+    function markBad(card) {
+        if (!card) return;
+        card.classList.remove("correct", "selected");
+        card.classList.add("incorrect");
+        playAudio("fail-sound");
+
+        setTimeout(() => {
+            card.classList.remove("incorrect");
+            moveCardToRandomPosition(card);
+        }, 450);
+    }
+
+    function attemptPlacement(card, dropzone) {
+        if (!card || !dropzone || dropzone.classList.contains("completed")) return;
+
+        if (card.dataset.category === dropzone.dataset.category) {
+            placeCard(card, dropzone);
+        } else {
+            markBad(card);
+            clearSelectedCard();
+        }
+    }
+
+    function placeCard(card, dropzone) {
+        const itemId = card.dataset.id;
+        const item = gameData.items.find(entry => String(entry.id) === String(itemId));
+        const answersBox = dropzone.querySelector(".dropzone-answers");
+
+        if (!item || !answersBox) return;
+
+        answersBox.appendChild(card);
+        card.classList.remove("incorrect", "selected", "dragging");
+        card.classList.add("correct");
+        card.draggable = false;
+        item._placed = true;
+
+        if (selectedCardId === card.id) {
+            clearSelectedCard();
+        }
+
+        playAudio("matching-touch");
+        updateZoneEmptyState(dropzone);
+        updateProgress();
+
+        if (item.explanation !== undefined && item.explanation !== null && item.explanation !== "") {
+            showPopup(item.explanation);
+        }
+
+        checkCompletion();
+    }
+
+    function activateFinishMode() {
+        pageWrap.classList.add("finish-mode");
+        updateZoneLayout();
+    }
+
+    function checkCompletion() {
+        const done = gameData.items.every(item => item._placed);
+
+        if (done && !finishCelebrationPlayed) {
+            finishCelebrationPlayed = true;
+            playAudio("success-sound");
+
+            const fireworkInterval = setInterval(() => launchFireworks(18), 500);
+            launchFireworks(16);
+            setTimeout(() => clearInterval(fireworkInterval), 3000);
+            setTimeout(() => activateFinishMode(), 850);
+        }
+    }
+
+    function launchFireworks(count = 18) {
+        for (let i = 0; i < count; i++) {
+            const firework = document.createElement("div");
+            firework.className = "firework";
+            firework.style.left = Math.random() * window.innerWidth + "px";
+            firework.style.top = Math.random() * (window.innerHeight * 0.6) + "px";
+            firework.style.color = `hsl(${Math.random() * 360}, 100%, 55%)`;
+
+            document.body.appendChild(firework);
+            setTimeout(() => firework.remove(), 700);
+        }
+    }
+
+    function resetGame() {
+        finishCelebrationPlayed = false;
+        selectedCardId = null;
+        pageWrap.classList.remove("finish-mode");
+        closePopup();
+        closeImageModal();
+
+        gameData.items.forEach(item => {
+            item._placed = false;
+        });
+
+        renderZones();
+        renderCards();
+        updateProgress();
+        refreshZoneClickState();
+        document.querySelectorAll(".dropzone").forEach(updateZoneEmptyState);
+    }
+
+    popup.addEventListener("click", event => {
+        if (event.target === popup) closePopup();
+    });
+
+    imageModal.addEventListener("click", event => {
+        if (event.target === imageModal) closeImageModal();
+    });
+
+    resetButton.addEventListener("click", resetGame);
+    window.addEventListener("resize", updateZoneLayout);
+
+    applyMeta();
+    resetGame();
+</script>
+</body>
+</html>
